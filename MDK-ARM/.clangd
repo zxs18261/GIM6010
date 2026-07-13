@@ -1,0 +1,7 @@
+CompileFlags:
+  Add:
+    - -isystemnull/include
+    - -isystemnull/include/libcxx
+  Remove: []
+  CompilationDatabase: ./build/GIM6010_V0.0
+  Compiler: null\bin\armclang.exe
