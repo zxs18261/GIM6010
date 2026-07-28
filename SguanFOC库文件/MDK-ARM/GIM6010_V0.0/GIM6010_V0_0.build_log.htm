@@ -1,0 +1,68 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: ¦ÌVision V5.42.0.0
+Copyright (C) 2025 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: 1 Xushengzhu, 1, LIC=9WSKC-7176F-NN1AF-6YWGL-5NI06-MGAQZ
+ 
+Tool Versions:
+Toolchain:       MDK-ARM Plus  Version: 5.42.0.0
+Toolchain Path:  C:\Users\Xushengzhu\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin
+C Compiler:      ArmClang.exe V6.23
+Assembler:       Armasm.exe V6.23
+Linker/Locator:  ArmLink.exe V6.23
+Library Manager: ArmAr.exe V6.23
+Hex Converter:   FromElf.exe V6.23
+CPU DLL:         SARMCM3.DLL V5.42.0.0
+Dialog DLL:      DCM.DLL V1.17.5.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.0.0
+Dialog DLL:      TCM.DLL V1.56.6.0
+ 
+<h2>Project:</h2>
+E:\github\GIM6010\SguanFOC¿âÎÄ¼þ\MDK-ARM\GIM6010_V0.0.uvprojx
+Project File Date:  07/28/2026
+
+<h2>Output:</h2>
+*** Using Compiler 'V6.23', folder: 'C:\Users\Xushengzhu\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
+Build target 'GIM6010_V0.0'
+../SguanFOC/Sguan_printf.c(25): error: '#pragma import' is an Arm Compiler 5 extension, and is not supported by Arm Compiler for Embedded 6 [-Warmcc-pragma-import]
+   25 | #pragma import(__use_no_semihosting)
+      |         ^
+../SguanFOC/Sguan_printf.c(27): error: redefinition of '__FILE'
+   27 | struct __FILE{ 
+      |        ^
+C:\Users\Xushengzhu\AppData\Local\Keil_v5\ARM\ARMCLANG\bin\..\include\stdio.h(119): note: previous definition is here
+  119 | struct __FILE {
+      |        ^
+2 errors generated.
+compiling Sguan_printf.c...
+"GIM6010_V0.0\GIM6010_V0_0.axf" - 2 Error(s), 0 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                https://www.keil.com/pack/ARM.CMSIS.6.1.0.pack
+                ARM::CMSIS@6.1.0
+                CMSIS (Common Microcontroller Software Interface Standard)
+   * Component: CORE Version: 6.1.0
+
+Package Vendor: Keil
+                https://www.keil.com/pack/Keil.STM32G4xx_DFP.2.2.0.pack
+                Keil::STM32G4xx_DFP@2.2.0
+                STMicroelectronics STM32G4 Series Device Support
+
+<h2>Collection of Component include folders:</h2>
+  ./RTE/_GIM6010_V0.0
+  C:/Users/Xushengzhu/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE@6.1.0
+      Include file:  CMSIS/Core/Include/tz_context.h
+Target not created.
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>

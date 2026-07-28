@@ -1,0 +1,129 @@
+{
+    "settings_ctx":  [
+                         {
+                             "scale":  1,
+                             "decimal":  3,
+                             "color":  "#e6194B",
+                             "name":  "Iu_A",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  3,
+                             "color":  "#3cb44b",
+                             "name":  "Iv_A",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  3,
+                             "color":  "#4363d8",
+                             "name":  "Iw_A",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  1,
+                             "color":  "#f032e6",
+                             "name":  "Theta_e_deg",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  1,
+                             "color":  "#42d4f4",
+                             "name":  "Theta_m_deg",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  4,
+                             "color":  "#911eb4",
+                             "name":  "Pos_act_rad",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  4,
+                             "color":  "#f58231",
+                             "name":  "Pos_tgt_rad",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  3,
+                             "color":  "#bfef45",
+                             "name":  "Spd_act",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  3,
+                             "color":  "#ffd700",
+                             "name":  "Spd_tgt",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  1,
+                             "color":  "#dcbeff",
+                             "name":  "Vbus_V",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  3,
+                             "color":  "#aaffc3",
+                             "name":  "Id_A",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         },
+                         {
+                             "scale":  1,
+                             "decimal":  3,
+                             "color":  "#fabed4",
+                             "name":  "Iq_A",
+                             "is_draw":  true,
+                             "value":  0,
+                             "yoffset":  0,
+                             "xoffset":  0
+                         }
+                     ],
+    "description":  "GIM6010 FOC 三环调试 12 通道 JustFloat",
+    "baud":  921600,
+    "channel_count":  12,
+    "type":  "channels_preset",
+    "protocol":  "JustFloat"
+}
