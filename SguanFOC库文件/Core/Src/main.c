@@ -28,7 +28,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "SguanFOC.h"
+#include "BSP_RGB.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,17 +102,40 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM4_Init();
   MX_USART1_UART_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
+  HAL_UARTEx_ReceiveToIdle_DMA(&huart1, Sguan_PrintfBuff, sizeof(Sguan_PrintfBuff));
+  __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
+  HAL_TIM_Base_Start_IT(&htim1);  //启动10kHz定时器中断
+  HAL_TIM_Base_Start_IT(&htim2);  //启动1kHz定时器中断
+  BSP_RGB_Init();
+
+
+
+
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+
+  Sguan.mode = VelCur_DOUBLE_MODE; //设置电机控制模式为速度+电流模式
   while (1)
   {
+    /* 绿色呼吸灯：2s 一个周期，上电即运行 */
+    {
+      uint8_t breath = BSP_RGB_BreathLevel(HAL_GetTick(), 1000U);
+      BSP_RGB_SetColorLevel(255U, 255U, 255U, breath);
+    }
+    BSP_RGB_Poll();
+
+    SguanFOC_main_Loop();   //库函数初始化
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+  
+  
   }
   /* USER CODE END 3 */
 }

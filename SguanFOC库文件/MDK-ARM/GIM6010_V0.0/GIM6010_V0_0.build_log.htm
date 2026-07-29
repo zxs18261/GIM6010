@@ -22,23 +22,16 @@ Dialog DLL:      TCM.DLL V1.56.6.0
  
 <h2>Project:</h2>
 E:\github\GIM6010\SguanFOC¿âÎÄ¼þ\MDK-ARM\GIM6010_V0.0.uvprojx
-Project File Date:  07/28/2026
+Project File Date:  07/30/2026
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.23', folder: 'C:\Users\Xushengzhu\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'GIM6010_V0.0'
-../SguanFOC/Sguan_printf.c(25): error: '#pragma import' is an Arm Compiler 5 extension, and is not supported by Arm Compiler for Embedded 6 [-Warmcc-pragma-import]
-   25 | #pragma import(__use_no_semihosting)
-      |         ^
-../SguanFOC/Sguan_printf.c(27): error: redefinition of '__FILE'
-   27 | struct __FILE{ 
-      |        ^
-C:\Users\Xushengzhu\AppData\Local\Keil_v5\ARM\ARMCLANG\bin\..\include\stdio.h(119): note: previous definition is here
-  119 | struct __FILE {
-      |        ^
-2 errors generated.
-compiling Sguan_printf.c...
-"GIM6010_V0.0\GIM6010_V0_0.axf" - 2 Error(s), 0 Warning(s).
+compiling main.c...
+linking...
+Program Size: Code=31654 RO-data=2778 RW-data=20 ZI-data=4452  
+FromELF: creating hex file...
+"GIM6010_V0.0\GIM6010_V0_0.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -61,7 +54,6 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@6.1.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Target not created.
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

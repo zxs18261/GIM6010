@@ -1,8 +1,11 @@
 #ifndef __USERDATA_STATUS_H
 #define __USERDATA_STATUS_H
 #include <stdint.h>
-/* 电机控制User用户设置·状态管理 */
+/* 电机控制User用户设置·状态管理 ，可以设定不同的状态进行不同的亮灯，或者上位机上显示不同的数据*/
 /* 用户自己的CODE BEGIN Includes */
+#include "main.h"
+#include "BSP_RGB.h"      //不同的状态亮不同状态的灯
+#include "Sguan_printf.h" //不同的状态向上位机显示不同的状态位
 
 /* 用户自己的CODE END Includes */
 

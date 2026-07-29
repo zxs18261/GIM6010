@@ -3,8 +3,11 @@
 /* 电机控制User用户设置·功能接口 */
 /* 用户自己的CODE BEGIN Includes */
 // like: #include "main.h"
-
-
+#include "main.h"
+#include "tim.h"
+#include "adc.h"
+#include "usart.h"
+#include "Timer.h"
 /* 用户自己的CODE END Includes */
 
 static inline void User_InitialInit(void){
@@ -22,11 +25,20 @@ static inline void User_InitialInit(void){
     // 设置TIM3计数器初始值
     __HAL_TIM_SET_COUNTER(&htim3, 0);
     */
+    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
+    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_4);
+
+
+
+
 }
 
 static inline void User_Delay(unsigned int ms){
     /* Your code for Delay_ms here */
     // like: HAL_Delay(ms);
+    HAL_Delay(ms);
 }
 
 static inline signed int User_ReadADC_Raw(unsigned char Current_CH){
@@ -38,10 +50,17 @@ static inline signed int User_ReadADC_Raw(unsigned char Current_CH){
     case 0:
         /* Your code for Motor CH0 raw */
         // like: ADC_num = (signed int)ADC_InjectedValues[1];
+
         break;
     case 1:
         /* Your code for Motor CH1 raw */
         // like: ADC_num = (signed int)ADC_InjectedValues[2];
+
+        break;
+    case 2:
+        /* Your code for Motor CH2 raw */
+        // like: ADC_num = (signed int)ADC_InjectedValues[3];
+
         break;
     default:
         break;
@@ -49,6 +68,7 @@ static inline signed int User_ReadADC_Raw(unsigned char Current_CH){
     return ADC_num;
 }
 
+//编码器的数据
 static inline float User_Encoder_ReadRad(void){
     float Rad_num = 0.0f;
     /* Your code for encoder radian position (0-2pi) if you use SensorFOC */

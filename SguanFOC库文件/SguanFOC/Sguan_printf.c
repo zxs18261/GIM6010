@@ -21,7 +21,7 @@ uint8_t Sguan_PrintfBuff[200];
 
 /* ================= 重定向设计 BEGIN ================= */
 // 支持printf函数，而无需选择MicroLIB
-#if 1
+#if 0
 #pragma import(__use_no_semihosting)
 //标准库需要的支持函数
 struct __FILE{ 

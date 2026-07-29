@@ -18,7 +18,7 @@
           <Vendor>STMicroelectronics</Vendor>
           <PackID>Keil.STM32G4xx_DFP.2.2.0</PackID>
           <PackURL>https://www.keil.com/pack/</PackURL>
-          <Cpu>IRAM(0x20000000-0x20007FFF) IROM(0x8000000-0x801FFFF) CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4") TZ</Cpu>
+          <Cpu>IRAM(0x20000000-0x20007FFF) IROM(0x8000000-0x801FFFF)  CLOCK(8000000) FPU2 CPUTYPE("Cortex-M4") TZ</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile></StartupFile>
           <FlashDriverDll></FlashDriverDll>
@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32G431xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc;../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32G4xx/Include;../Drivers/CMSIS/Include;../Hardware;../SguanFOC;../BSP</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -580,9 +580,19 @@
           <GroupName>SguanFOC</GroupName>
           <Files>
             <File>
+              <FileName>Sguan_Config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_Config.h</FilePath>
+            </File>
+            <File>
               <FileName>Sguan_Filter.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SguanFOC\Sguan_Filter.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sguan_Filter.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_Filter.h</FilePath>
             </File>
             <File>
               <FileName>Sguan_IQmath.c</FileName>
@@ -590,9 +600,19 @@
               <FilePath>..\SguanFOC\Sguan_IQmath.c</FilePath>
             </File>
             <File>
+              <FileName>Sguan_IQmath.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_IQmath.h</FilePath>
+            </File>
+            <File>
               <FileName>Sguan_MotorStatus.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SguanFOC\Sguan_MotorStatus.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sguan_MotorStatus.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_MotorStatus.h</FilePath>
             </File>
             <File>
               <FileName>Sguan_Optimize.c</FileName>
@@ -600,9 +620,19 @@
               <FilePath>..\SguanFOC\Sguan_Optimize.c</FilePath>
             </File>
             <File>
+              <FileName>Sguan_Optimize.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_Optimize.h</FilePath>
+            </File>
+            <File>
               <FileName>Sguan_PID.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SguanFOC\Sguan_PID.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sguan_PID.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_PID.h</FilePath>
             </File>
             <File>
               <FileName>Sguan_PLL.c</FileName>
@@ -610,9 +640,19 @@
               <FilePath>..\SguanFOC\Sguan_PLL.c</FilePath>
             </File>
             <File>
+              <FileName>Sguan_PLL.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_PLL.h</FilePath>
+            </File>
+            <File>
               <FileName>Sguan_printf.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SguanFOC\Sguan_printf.c</FilePath>
+            </File>
+            <File>
+              <FileName>Sguan_printf.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_printf.h</FilePath>
             </File>
             <File>
               <FileName>Sguan_STA.c</FileName>
@@ -620,14 +660,59 @@
               <FilePath>..\SguanFOC\Sguan_STA.c</FilePath>
             </File>
             <File>
+              <FileName>Sguan_STA.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_STA.h</FilePath>
+            </File>
+            <File>
               <FileName>Sguan_SVPWM.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SguanFOC\Sguan_SVPWM.c</FilePath>
             </File>
             <File>
+              <FileName>Sguan_SVPWM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\Sguan_SVPWM.h</FilePath>
+            </File>
+            <File>
               <FileName>SguanFOC.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\SguanFOC\SguanFOC.c</FilePath>
+            </File>
+            <File>
+              <FileName>SguanFOC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\SguanFOC.h</FilePath>
+            </File>
+            <File>
+              <FileName>UserData_Config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\UserData_Config.h</FilePath>
+            </File>
+            <File>
+              <FileName>UserData_Function.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\UserData_Function.h</FilePath>
+            </File>
+            <File>
+              <FileName>UserData_Motor.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\UserData_Motor.h</FilePath>
+            </File>
+            <File>
+              <FileName>UserData_Parameter.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\UserData_Parameter.h</FilePath>
+            </File>
+            <File>
+              <FileName>UserData_Status.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\UserData_Status.h</FilePath>
+            </File>
+            <File>
+              <FileName>UserData_UserControl.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\SguanFOC\UserData_UserControl.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -638,6 +723,41 @@
               <FileName>Timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hardware\Timer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>BSP</GroupName>
+          <Files>
+            <File>
+              <FileName>BSP_ADC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\BSP_ADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_ADC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BSP\BSP_ADC.h</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_MT6816.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\BSP_MT6816.c</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_MT6816.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BSP\BSP_MT6816.h</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_RGB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\BSP\BSP_RGB.c</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_RGB.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BSP\BSP_RGB.h</FilePath>
             </File>
           </Files>
         </Group>

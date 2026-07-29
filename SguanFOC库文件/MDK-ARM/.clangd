@@ -1,0 +1,9 @@
+CompileFlags:
+  Add:
+    - -isystemnull/include
+    - -isystemnull/include/libcxx
+    - -isystemC:\Users\Xushengzhu\AppData\Local\Keil_v5\ARM\ARMCLANG/include
+    - -isystemC:\Users\Xushengzhu\AppData\Local\Keil_v5\ARM\ARMCLANG/include/libcxx
+  Remove: []
+  CompilationDatabase: ./build/GIM6010_V0.0
+  Compiler: C:\Users\Xushengzhu\AppData\Local\Keil_v5\ARM\ARMCLANG\bin\armclang.exe
