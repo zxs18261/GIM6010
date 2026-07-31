@@ -123,11 +123,12 @@ int main(void)
   Sguan.mode = VelCur_DOUBLE_MODE; //设置电机控制模式为速度+电流模式
   while (1)
   {
-    /* 绿色呼吸灯：2s 一个周期，上电即运行 */
-    {
-      uint8_t breath = BSP_RGB_BreathLevel(HAL_GetTick(), 1000U);
-      BSP_RGB_SetColorLevel(255U, 255U, 255U, breath);
-    }
+    /* 灯效示例：改调用预设即可，参数在 BSP_RGB.h / BSP_RGB.c 中配置 */
+     BSP_RGB_Solid(BSP_RGB_ID_GREEN, 200U);                              /* 1. 常亮 */
+    //BSP_RGB_Blink(HAL_GetTick(), &BSP_RGB_BLINK_3x1S_PAUSE5S,
+    //               BSP_RGB_ID_RED, 255U);                                 /* 3. 分组闪 */
+    //BSP_RGB_Breath(HAL_GetTick(), &BSP_RGB_BREATH_GREEN);               /* 4. 单色呼吸 */
+    //BSP_RGB_RainbowBreath(HAL_GetTick(), &BSP_RGB_RAINBOW);                  /* 5. 彩色呼吸 */
     BSP_RGB_Poll();
 
     SguanFOC_main_Loop();   //库函数初始化
