@@ -1,0 +1,46 @@
+{
+    "configurations": [
+        {
+            "name": "SguanFOC_GIM6010",
+            "includePath": [
+                "E:/github/GIM6010/SguanFOC库文件/Core/Inc",
+                "E:/github/GIM6010/SguanFOC库文件/Drivers/STM32G4xx_HAL_Driver/Inc",
+                "E:/github/GIM6010/SguanFOC库文件/Drivers/STM32G4xx_HAL_Driver/Inc/Legacy",
+                "E:/github/GIM6010/SguanFOC库文件/Drivers/CMSIS/Device/ST/STM32G4xx/Include",
+                "E:/github/GIM6010/SguanFOC库文件/Drivers/CMSIS/Include",
+                "E:/github/GIM6010/SguanFOC库文件/SguanFOC",
+                "E:/github/GIM6010/SguanFOC库文件/BSP",
+                "E:/github/GIM6010/SguanFOC库文件/Hardware",
+                "${workspaceFolder}/Core/Inc",
+                "${workspaceFolder}/../Core/Inc",
+                "${workspaceFolder}/Drivers/STM32G4xx_HAL_Driver/Inc",
+                "${workspaceFolder}/../Drivers/STM32G4xx_HAL_Driver/Inc",
+                "${workspaceFolder}/Drivers/STM32G4xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32G4xx/Include",
+                "${workspaceFolder}/../Drivers/CMSIS/Device/ST/STM32G4xx/Include",
+                "${workspaceFolder}/Drivers/CMSIS/Include",
+                "${workspaceFolder}/../Drivers/CMSIS/Include",
+                "${workspaceFolder}/SguanFOC",
+                "${workspaceFolder}/../SguanFOC",
+                "${workspaceFolder}/BSP",
+                "${workspaceFolder}/../BSP",
+                "${workspaceFolder}/Hardware",
+                "${workspaceFolder}/../Hardware"
+            ],
+            "defines": [
+                "USE_HAL_DRIVER",
+                "STM32G431xx"
+            ],
+            "cStandard": "c11",
+            "intelliSenseMode": "gcc-arm",
+            "browse": {
+                "path": [
+                    "E:/github/GIM6010/SguanFOC库文件"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

@@ -73,6 +73,9 @@ static inline float User_Encoder_ReadRad(void){
     float Rad_num = 0.0f;
     /* Your code for encoder radian position (0-2pi) if you use SensorFOC */
     // like: Rad_num = Encoder_GetRad();
+
+
+
     return Rad_num;
 }
 
@@ -106,8 +109,16 @@ static inline float User_Temperature_DataGet(void){
 
 /* ================= 驱动代码(驱动层) ================= */
 static inline void User_CorrespondSet(unsigned char *ch, unsigned short int size){
-    /* Your code for UART or CAN Signal Transmit Driver */
-    // like: HAL_UART_Transmit(&huart1, ch, size, 0xFFFF);
+    /* USART1 TX DMA：等上一帧发完再启动，避免冲掉进行中的 DMA 缓冲 */
+    uint32_t tickstart = HAL_GetTick();
+    while (huart1.gState != HAL_UART_STATE_READY)
+    {
+        if ((HAL_GetTick() - tickstart) > 20U)
+        {
+            return;
+        }
+    }
+    (void)HAL_UART_Transmit_DMA(&huart1, ch, size);
 }
 
 

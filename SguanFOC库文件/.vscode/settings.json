@@ -1,0 +1,19 @@
+{
+    "C_Cpp.default.configurationProvider": "",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/Core/Inc",
+        "${workspaceFolder}/Drivers/STM32G4xx_HAL_Driver/Inc",
+        "${workspaceFolder}/Drivers/STM32G4xx_HAL_Driver/Inc/Legacy",
+        "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32G4xx/Include",
+        "${workspaceFolder}/Drivers/CMSIS/Include",
+        "${workspaceFolder}/SguanFOC",
+        "${workspaceFolder}/BSP",
+        "${workspaceFolder}/Hardware"
+    ],
+    "C_Cpp.default.defines": [
+        "USE_HAL_DRIVER",
+        "STM32G431xx"
+    ],
+    "EIDE.ARM.ARMCC6.InstallDirectory": "C:\\Users\\18261\\AppData\\Local\\Keil_v5\\ARM\\ARMCLANG",
+    "EIDE.ARM.ARMCC5.InstallDirectory": "C:\\Users\\18261\\AppData\\Local\\Keil_v5\\ARM\\ARMCC"
+}
