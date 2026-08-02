@@ -122,6 +122,10 @@ void Printf_Adjust(void){
     if(Sguan_PrintfBuff[0]=='C' && Sguan_PrintfBuff[1]=='O'){
         User_CO_Adjust(data_Get);
     }
+    /* VO=开环电角速度 ωe [rad/s]，见 User_VO_Adjust */
+    if(Sguan_PrintfBuff[0]=='V' && Sguan_PrintfBuff[1]=='O'){
+        User_VO_Adjust(data_Get);
+    }
     memset(Sguan_PrintfBuff, 0, sizeof(Sguan_PrintfBuff));
 }
 

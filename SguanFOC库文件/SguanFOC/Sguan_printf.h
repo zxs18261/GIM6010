@@ -8,7 +8,7 @@
  * @description: 自定义数据发送的个数(默认为8)
  * @return {*}
  */
-#define CH_COUNT 12 // UART或者CAN发送的数据个数
+#define CH_COUNT 18 // UART JustFloat：固定12 + 调试扩展6
 
 typedef struct{
     float fdata[CH_COUNT];

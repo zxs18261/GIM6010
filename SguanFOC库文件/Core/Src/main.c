@@ -106,27 +106,40 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_UARTEx_ReceiveToIdle_DMA(&huart1, Sguan_PrintfBuff, sizeof(Sguan_PrintfBuff));
   __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
-  HAL_TIM_Base_Start_IT(&htim1);  /* 10kHz */
-  HAL_TIM_Base_Start_IT(&htim2);  /* 1kHz */
+  /* TIM1 只作 PWM（User_InitialInit 里 Start），不要开 Update 中断：
+   * 20kHz 里跑 High_Loop+SPI 会占满 CPU，灯/串口全死 */
+  HAL_TIM_Base_Start_IT(&htim2);  /* 1kHz：High_Loop + Low_Loop */
   BSP_RGB_Init();
 
-  /* 先跑通串口：跳过 FOC 校准延时，直接进入可发送状态 */
-  Printf_Init(&Sguan.TXdata);
-  Sguan.mode = VelCur_DOUBLE_MODE;
-  Sguan.status = MOTOR_STATUS_IDLE;
+
+
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+
+//  Sguan.mode = VelCur_DOUBLE_MODE; //设置电机控制模式为速度+电流模式
+  Sguan.mode = Velocity_OPEN_MODE; //设置电机控制模式为开环
+  Sguan.status = MOTOR_STATUS_UNINITIALIZED;
   while (1)
   {
-    BSP_RGB_Breath(HAL_GetTick(), &BSP_RGB_BREATH_GREEN);
+    /* 灯效示例：改调用预设即可，参数在 BSP_RGB.h / BSP_RGB.c 中配置 */
+    //BSP_RGB_Solid(BSP_RGB_ID_GREEN, 200U);                              /* 1. 常亮 */
+    //BSP_RGB_Blink(HAL_GetTick(), &BSP_RGB_BLINK_3x1S_PAUSE5S,
+    //               BSP_RGB_ID_RED, 255U);                                 /* 3. 分组闪 */
+    BSP_RGB_Breath(HAL_GetTick(), &BSP_RGB_BREATH_GREEN);                /* 4. 单色呼吸 */
+    //BSP_RGB_RainbowBreath(HAL_GetTick(), &BSP_RGB_RAINBOW);                  /* 5. 彩色呼吸 */
     BSP_RGB_Poll();
 
-    SguanFOC_main_Loop();   /* status=IDLE 后持续发 JustFloat */
+    SguanFOC_main_Loop();   //库函数初始化
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+  
+  
   }
   /* USER CODE END 3 */
 }

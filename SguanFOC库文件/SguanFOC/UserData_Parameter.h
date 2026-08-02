@@ -13,8 +13,8 @@ static inline void User_ParameterSet(void){
     Sguan.control.Current_D.Kp = 0.3425f;           // PID电流环D轴参数->Kp(核心参数)
     Sguan.control.Current_D.Ki = 1257.27f;          // PID电流环D轴参数->Ki(核心参数)
     Sguan.control.Current_D.Kd = 0.0f;              // PID电流环D轴参数->Kd(参数)
-    Sguan.control.Current_D.OutMax = 12.0f;         // PID电流环D轴参数->最大限幅(默认参数)
-    Sguan.control.Current_D.OutMin = -12.0f;        // PID电流环D轴参数->最小限幅(默认参数)
+    Sguan.control.Current_D.OutMax = 12.0f;         // 电压限幅≈VBUS/2（24V 母线）
+    Sguan.control.Current_D.OutMin = -12.0f;
     Sguan.control.Current_D.IntMax = 50.0f;         // PID电流环D轴参数->积分项上限(默认参数)
     Sguan.control.Current_D.IntMin = -50.0f;        // PID电流环D轴参数->积分项下限(默认参数)
     /* =========================== 分割线 ========================== */
@@ -22,8 +22,8 @@ static inline void User_ParameterSet(void){
     Sguan.control.Current_Q.Kp = 0.3425f;           // PID电流环Q轴参数->Kp(核心参数)
     Sguan.control.Current_Q.Ki = 1257.27f;          // PID电流环Q轴参数->Ki(核心参数)
     Sguan.control.Current_Q.Kd = 0.0f;              // PID电流环Q轴参数->Kd(参数)
-    Sguan.control.Current_Q.OutMax = 12.0f;         // PID电流环Q轴参数->最大限幅(默认参数)
-    Sguan.control.Current_Q.OutMin = -12.0f;        // PID电流环Q轴参数->最小限幅(默认参数)
+    Sguan.control.Current_Q.OutMax = 12.0f;         // 电压限幅≈VBUS/2（24V 母线）
+    Sguan.control.Current_Q.OutMin = -12.0f;
     Sguan.control.Current_Q.IntMax = 50.0f;         // PID电流环Q轴参数->积分项上限(默认参数)
     Sguan.control.Current_Q.IntMin = -50.0f;        // PID电流环Q轴参数->积分项下限(默认参数)
 
@@ -32,16 +32,16 @@ static inline void User_ParameterSet(void){
     Sguan.control.Velocity.Kp = 0.06f;              // 双PID速度外环参数(核心参数)
     Sguan.control.Velocity.Ki = 0.4f;               // 双PID速度外环参数(核心参数)
     Sguan.control.Velocity.Kd = 0.0f;               // 双PID速度外环参数(参数)
-    Sguan.control.Velocity.OutMax = 10.5f;          // 双PID速度外环参数(默认参数)
-    Sguan.control.Velocity.OutMin = -10.5f;         // 双PID速度外环参数(默认参数)
+    Sguan.control.Velocity.OutMax = 6.6f;           // Iq 限幅→额定电流 6.6A（峰值可调到 30.47）
+    Sguan.control.Velocity.OutMin = -6.6f;
     Sguan.control.Velocity.IntMax = 15000.0f;       // 双PID速度外环参数->积分项上限(默认参数)
     Sguan.control.Velocity.IntMin = -15000.0f;      // 双PID速度外环参数->积分项下限(默认参数)
     #else // Open_PI_Control
     Sguan.control.Speed.boundary = 12.0f;           // STA二阶滑膜转速环->边界厚度
     Sguan.control.Speed.k1 = 0.36f;                 // STA二阶滑膜转速环->比例项增益
     Sguan.control.Speed.k2 = 52.0f;                 // STA二阶滑膜转速环->积分项增益
-    Sguan.control.Speed.OutMax = 10.5f;             // STA二阶滑膜转速环->输出限幅
-    Sguan.control.Speed.OutMin = -10.5f;            // STA二阶滑膜转速环->输出限幅
+    Sguan.control.Speed.OutMax = 6.6f;              // Iq 限幅→额定 6.6A
+    Sguan.control.Speed.OutMin = -6.6f;
     Sguan.control.Speed.IntMax = 50.0f;             // STA二阶滑膜转速环->积分限幅
     Sguan.control.Speed.IntMin = -50.0f;            // STA二阶滑膜转速环->积分限幅
     #endif // Open_PI_Control
@@ -49,8 +49,8 @@ static inline void User_ParameterSet(void){
     Sguan.control.Position.Kp = 7.0f;               // 高性能伺服三环pos(核心参数)
     Sguan.control.Position.Ki = 0.0f;               // 高性能伺服三环pos(参数)
     Sguan.control.Position.Kd = 0.0f;               // 高性能伺服三环pos(核心参数)
-    Sguan.control.Position.OutMax = 230.0f;         // 高性能伺服三环pos(默认参数)
-    Sguan.control.Position.OutMin = -230.0f;        // 高性能伺服三环pos(默认参数)
+    Sguan.control.Position.OutMax = 205.3f;         // 电机轴额定角速度 [rad/s]（1960 rpm）
+    Sguan.control.Position.OutMin = -205.3f;
     Sguan.control.Position.IntMax = 150.0f;         // 高性能伺服三环pos->积分项上限(默认参数)
     Sguan.control.Position.IntMin = -150.0f;        // 高性能伺服三环pos->积分项下限(默认参数)
 

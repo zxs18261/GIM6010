@@ -70,5 +70,23 @@
 // 定时器中断参数设计
 #define TIM_T 1e-4                          // 最大频率的控制周期
 
+/* ================= GIM6010 24V 规格常量（见 资料/文档/GIM6010_电机参数规格书(24V).md） ================= */
+#define GIM6010_GEAR_RATIO          8.0f        // 减速比 8:1
+#define GIM6010_ENCODER_BITS        14          // 本板 MT6816 位数（模块内置为 16bit）
+#define GIM6010_RATED_CURRENT_A     6.6f        // 额定电流 [A]
+#define GIM6010_PEAK_CURRENT_A      30.47f      // 堵转/峰值电流 [A]
+#define GIM6010_SHAFT_RATED_RAD_S   25.66f      // 输出轴额定角速度 [rad/s]（245 rpm）
+#define GIM6010_MOTOR_RATED_RAD_S   205.3f      // 电机轴额定角速度 [rad/s]（1960 rpm）
+#define GIM6010_KT_NM_A             0.61f       // 扭矩常数 [N·m/A]
+
+/**
+ * @description: 上电校准“转子回零”的 d 轴电压比例 Ud = 比例 × VBUS
+ * @reminder: 原库默认 0.3（24V→7.2V）。Rs=0.44Ω 时理论电流仍可达十余安，
+ *            2A 电源会 OCP。开环调试建议 0.03~0.06；电源≥5A 可略加大。
+ */
+#define USER_ALIGN_UD_RATIO     0.04f
+#define USER_ALIGN_HOLD_MS      800U        // 回零保持时间 [ms]
+#define USER_ALIGN_RELEASE_MS   400U        // 撤电压后再等 [ms]
+
 
 #endif // USERDATA_CONFIG_H

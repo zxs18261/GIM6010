@@ -2,65 +2,59 @@
 #define __USERDATA_FUNCTION_H
 /* 电机控制User用户设置·功能接口 */
 /* 用户自己的CODE BEGIN Includes */
-// like: #include "main.h"
 #include "main.h"
 #include "tim.h"
 #include "adc.h"
 #include "usart.h"
 #include "Timer.h"
+#include "BSP_MT6816.h"
 /* 用户自己的CODE END Includes */
 
 static inline void User_InitialInit(void){
-    /* Your code for initing TIM and gate driver and encoder and ADC here */
-    /* like: 
-    // 开启SD使能栅极驱动器
-    HAL_GPIO_WritePin(SD1_GPIO_Port,SD1_Pin,GPIO_PIN_SET);
-    HAL_GPIO_WritePin(SD2_GPIO_Port,SD2_Pin,GPIO_PIN_SET);
-    HAL_GPIO_WritePin(SD3_GPIO_Port,SD3_Pin,GPIO_PIN_SET);
-    // 开启PWM输出
-    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
-    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
-    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
-    HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
-    // 设置TIM3计数器初始值
-    __HAL_TIM_SET_COUNTER(&htim3, 0);
-    */
-    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
-    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_2);
-    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_3);
-    HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_4);
+    TIM_MasterConfigTypeDef sMasterConfig = {0};
 
+    (void)HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
 
+    /* Cube 默认 TRGO2=RESET；改为 OC4REF，便于注入采样（控制环已由 TIM1 更新兜底） */
+    sMasterConfig.MasterOutputTrigger  = TIM_TRGO_RESET;
+    sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_OC4REF;
+    sMasterConfig.MasterSlaveMode      = TIM_MASTERSLAVEMODE_DISABLE;
+    (void)HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig);
 
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+    HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_4);
 
+    /* 三相先等占空比（零电压矢量）；CH4 在峰值前提前触发 ADC */
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 2125U);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 2125U);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 2125U);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_4, 4250U - 40U);
+
+    /* 强制打开主输出（功率级使能） */
+    __HAL_TIM_MOE_ENABLE(&htim1);
+
+    (void)HAL_ADCEx_InjectedStart_IT(&hadc1);
+
+    BSP_MT6816_Init();
 }
 
 static inline void User_Delay(unsigned int ms){
-    /* Your code for Delay_ms here */
-    // like: HAL_Delay(ms);
     HAL_Delay(ms);
 }
 
 static inline signed int User_ReadADC_Raw(unsigned char Current_CH){
-    // 电流采样通道0->AB相，1->AC相，2->BC相
-    // Sguan.motor.Current_Num值自定义采样通道
-    // 用户在UserData_Motor.h中定义“这个值”
     signed int ADC_num = 0;
     switch (Current_CH){
     case 0:
-        /* Your code for Motor CH0 raw */
-        // like: ADC_num = (signed int)ADC_InjectedValues[1];
-
+        ADC_num = (signed int)ADC_InjectedValues[0];
         break;
     case 1:
-        /* Your code for Motor CH1 raw */
-        // like: ADC_num = (signed int)ADC_InjectedValues[2];
-
-        break;
-    case 2:
-        /* Your code for Motor CH2 raw */
-        // like: ADC_num = (signed int)ADC_InjectedValues[3];
-
+        ADC_num = (signed int)ADC_InjectedValues[1];
         break;
     default:
         break;
@@ -68,48 +62,28 @@ static inline signed int User_ReadADC_Raw(unsigned char Current_CH){
     return ADC_num;
 }
 
-//编码器的数据
 static inline float User_Encoder_ReadRad(void){
-    float Rad_num = 0.0f;
-    /* Your code for encoder radian position (0-2pi) if you use SensorFOC */
-    // like: Rad_num = Encoder_GetRad();
-
-
-
-    return Rad_num;
+    return BSP_MT6816_GetMechRad();
 }
 
 static inline void User_PwmDuty_Set(unsigned short int Duty_u,
                                 unsigned short int Duty_v,
                                 unsigned short int Duty_w){
-    /* Your code for Motor PWM_CH0~2 duty set */
-    /* 若是使用正常6相，设置死区补偿，可在此设计 */
-    /* like: 
-    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_1,Duty_u);
-    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_2,Duty_v);
-    __HAL_TIM_SET_COMPARE(&htim1,TIM_CHANNEL_3,Duty_w);
-    */
+    /* 本板丝印：TIM1_CH1=W, CH2=V, CH3=U（见 main.h HIN_W/V/U） */
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, Duty_w);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, Duty_v);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, Duty_u);
 }
 
 static inline float User_VBUS_DataGet(void){
-    // float VBUS_num = 0.0f;
-    /* Your code for motor VBUS_Voltage Data return if you use it */
-    
-    // 如果不使用电压功能，返回-9999.0f（正常电压不会是负数）
     return -9999.0f;
 }
 
 static inline float User_Temperature_DataGet(void){
-    // float Temp_num = 0.0f;
-    /* Your code for motor Temperature Data return if you use it */
-    
-    // 如果不使用温度功能，返回-9999.0f（正常温度不会是这么大的负数）
     return -9999.0f;
 }
 
-/* ================= 驱动代码(驱动层) ================= */
 static inline void User_CorrespondSet(unsigned char *ch, unsigned short int size){
-    /* USART1 TX DMA：等上一帧发完再启动，避免冲掉进行中的 DMA 缓冲 */
     uint32_t tickstart = HAL_GetTick();
     while (huart1.gState != HAL_UART_STATE_READY)
     {

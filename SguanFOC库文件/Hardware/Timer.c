@@ -2,11 +2,11 @@
  * @Author: 星必尘Sguan
  * @Date: 2025-05-08 19:26:48
  * @LastEditors: 星必尘Sguan|3464647102@qq.com
- * @LastEditTime: 2026-02-21 01:14:10
+ * @LastEditTime: 2026-08-02
  * @FilePath: \stm_SguanFOCtest\Hardware\Timer.c
- * @Description: TIM定时中断统一管理函数;
- * 
- * Copyright (c) 2025 by $JUST, All Rights Reserved. 
+ * @Description: TIM2=1kHz：Low_Loop + High_Loop（勿在 TIM1 20kHz 里跑 High_Loop+SPI，会饿死主循环）
+ *
+ * Copyright (c) 2025 by $JUST, All Rights Reserved.
  */
 #include "Timer.h"
 #include "adc.h"
@@ -14,46 +14,35 @@
 #include "main.h"
 
 extern UART_HandleTypeDef huart1;
+extern ADC_HandleTypeDef hadc1;
 volatile uint32_t ADC_InjectedValues[4] = {0};
 
-/**
- * @description: TIM中断回调函数，1ms和100us的定时器定时中断;
- * @param {TIM_HandleTypeDef*} htim
- * @return {*}
- */
+volatile uint32_t g_high_loop_cnt = 0;
+volatile float g_vofa_last_AO = 0.0f;
+volatile float g_vofa_last_BO = 0.0f;
+volatile float g_vofa_last_CO = 0.0f;
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    if (htim == &htim1){  // 10kHz中断
-
-    }
-    if (htim == &htim2){  // 1kHz中断
+    if (htim->Instance == TIM2) {
+        /* 取最近注入采样，1kHz 跑控制环（开环足够；主循环/RGB/串口可运行） */
+        ADC_InjectedValues[0] = HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_1);
+        ADC_InjectedValues[1] = HAL_ADCEx_InjectedGetValue(&hadc1, ADC_INJECTED_RANK_2);
+        g_high_loop_cnt++;
+        SguanFOC_High_Loop();
         SguanFOC_Low_Loop();
-			
-	}
+    }
 }
 
-/**
- * @description: ADCz注入转换完成回调函数，1ms的定时器定时中断;
- * @param {ADC_HandleTypeDef} *hadc
- * @return {*}
- */
-void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc){		
-
-    SguanFOC_High_Loop();
-	
+void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc){
+    if (hadc->Instance == ADC1) {
+        ADC_InjectedValues[0] = HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_1);
+        ADC_InjectedValues[1] = HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_2);
+    }
 }
 
-/**
- * @description: UART接收完成回调函数，用于处理串口接收的数据;
- * @param {UART_HandleTypeDef} *huart
- * @param {uint16_t} Size
- * @return {*}
- */
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size) {
     if (huart->Instance == USART1) {
-        // 直接调用Printf_ProcessData处理接收到的数据
         SguanFOC_Printf_Loop(Sguan_PrintfBuff, Size);
-        
-        // 重新启动DMA接收
         HAL_UARTEx_ReceiveToIdle_DMA(&huart1, Sguan_PrintfBuff, sizeof(Sguan_PrintfBuff));
         __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
     }

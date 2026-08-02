@@ -38,5 +38,5 @@ gim6010_v0.0/sguanfoc.o: ..\SguanFOC\SguanFOC.c ..\SguanFOC\SguanFOC.h \
   ..\SguanFOC\Sguan_PLL.h ..\SguanFOC\Sguan_STA.h \
   ..\SguanFOC\Sguan_SVPWM.h ..\SguanFOC\UserData_Function.h \
   ..\Core\Inc\tim.h ..\Core\Inc\adc.h ..\Core\Inc\usart.h \
-  ..\Hardware\Timer.h ..\SguanFOC\UserData_Motor.h \
+  ..\Hardware\Timer.h ..\BSP\BSP_MT6816.h ..\SguanFOC\UserData_Motor.h \
   ..\SguanFOC\UserData_Parameter.h ..\SguanFOC\UserData_UserControl.h

@@ -236,20 +236,6 @@ void DMA1_Channel2_IRQHandler(void)
 }
 
 /**
-  * @brief This function handles DMA1 channel3 global interrupt.
-  * @note  CubeMX 未管理该通道；BSP_RGB(WS2812/TIM4_CH2) 使用 DMA1_Channel3。
-  */
-void DMA1_Channel3_IRQHandler(void)
-{
-  /* USER CODE BEGIN DMA1_Channel3_IRQn 0 */
-  BSP_RGB_DmaIRQHandler();
-  /* USER CODE END DMA1_Channel3_IRQn 0 */
-  /* USER CODE BEGIN DMA1_Channel3_IRQn 1 */
-
-  /* USER CODE END DMA1_Channel3_IRQn 1 */
-}
-
-/**
   * @brief This function handles ADC1 and ADC2 global interrupt.
   */
 void ADC1_2_IRQHandler(void)
@@ -377,5 +363,12 @@ void USART1_IRQHandler(void)
 }
 
 /* USER CODE BEGIN 1 */
-
+/**
+  * @brief DMA1 Channel3 — BSP_RGB (WS2812 / TIM4_CH2)
+  * @note  CubeMX 不管理该通道；每次 Generate Code 后若本函数丢失，灯+主循环会卡死。
+  */
+void DMA1_Channel3_IRQHandler(void)
+{
+  BSP_RGB_DmaIRQHandler();
+}
 /* USER CODE END 1 */

@@ -1,7 +1,7 @@
 Dependencies for Project 'GIM6010_V0.0', Target 'GIM6010_V0.0': (DO NOT MODIFY !)
 CompilerVersion: 6230000::V6.23::ARMCLANG
-F (startup_stm32g431xx.s)(0x6A6DFE9C)(--target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -masm=auto  -Wa,armasm,--diag_suppress=A1950W -c-gdwarf-4-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 542" -Wa,armasm,--pd,"STM32G431xx SETA 1" -Wa,armasm,--pd,"_RTE_ SETA 1"-o gim6010_v0.0/startup_stm32g431xx.o)
-F (../Core/Src/main.c)(0x6A6DFFF7)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/main.o -MMD)
+F (startup_stm32g431xx.s)(0x6A6E0585)(--target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -masm=auto  -Wa,armasm,--diag_suppress=A1950W -c-gdwarf-4-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-Wa,armasm,--pd,"__UVISION_VERSION SETA 542" -Wa,armasm,--pd,"STM32G431xx SETA 1" -Wa,armasm,--pd,"_RTE_ SETA 1"-o gim6010_v0.0/startup_stm32g431xx.o)
+F (../Core/Src/main.c)(0x6A6EDBF5)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/main.o -MMD)
 I (..\Core\Inc\main.h)(0x6A6DCEC0)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal.h)(0x6A2E34AA)
 I (..\Core\Inc\stm32g4xx_hal_conf.h)(0x6A6DCEC0)
@@ -41,7 +41,7 @@ I (..\Core\Inc\spi.h)(0x6A6DCEC0)
 I (..\Core\Inc\tim.h)(0x6A6DCEC0)
 I (..\Core\Inc\usart.h)(0x6A6DCEC0)
 I (..\Core\Inc\gpio.h)(0x6A6DCEC0)
-I (..\SguanFOC\SguanFOC.h)(0x6A6DCEC2)
+I (..\SguanFOC\SguanFOC.h)(0x6A6ED1EC)
 I (..\SguanFOC\Sguan_Config.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_IQmath.h)(0x6A6DCEC2)
 I (..\SguanFOC\UserData_Config.h)(0x6A6DCEC2)
@@ -55,7 +55,8 @@ I (..\SguanFOC\Sguan_PID.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_PLL.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_STA.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_SVPWM.h)(0x6A6DCEC2)
-F (../Core/Src/gpio.c)(0x6A6DCEC0)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/gpio.o -MMD)
+I (..\BSP\BSP_MT6816.h)(0x6A6E0425)
+F (../Core/Src/gpio.c)(0x6A6E0580)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/gpio.o -MMD)
 I (..\Core\Inc\gpio.h)(0x6A6DCEC0)
 I (..\Core\Inc\main.h)(0x6A6DCEC0)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal.h)(0x6A2E34AA)
@@ -191,7 +192,7 @@ I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_tim.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_tim_ex.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart_ex.h)(0x6A2E34AA)
-F (../Core/Src/spi.c)(0x6A6DFE93)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/spi.o -MMD)
+F (../Core/Src/spi.c)(0x6A6E05EC)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/spi.o -MMD)
 I (..\Core\Inc\spi.h)(0x6A6DCEC0)
 I (..\Core\Inc\main.h)(0x6A6DCEC0)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal.h)(0x6A2E34AA)
@@ -293,7 +294,7 @@ I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_tim.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_tim_ex.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart_ex.h)(0x6A2E34AA)
-F (../Core/Src/stm32g4xx_it.c)(0x6A6DFFE4)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/stm32g4xx_it.o -MMD)
+F (../Core/Src/stm32g4xx_it.c)(0x6A6E0707)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/stm32g4xx_it.o -MMD)
 I (..\Core\Inc\main.h)(0x6A6DCEC0)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal.h)(0x6A2E34AA)
 I (..\Core\Inc\stm32g4xx_hal_conf.h)(0x6A6DCEC0)
@@ -326,7 +327,7 @@ I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_tim.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_tim_ex.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart_ex.h)(0x6A2E34AA)
-I (..\Core\Inc\stm32g4xx_it.h)(0x6A6DFFE4)
+I (..\Core\Inc\stm32g4xx_it.h)(0x6A6E070A)
 I (..\BSP\BSP_RGB.h)(0x6A6DCEC0)
 F (../Core/Src/stm32g4xx_hal_msp.c)(0x6A6DCEC0)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/stm32g4xx_hal_msp.o -MMD)
 I (..\Core\Inc\main.h)(0x6A6DCEC0)
@@ -1173,7 +1174,7 @@ I (..\SguanFOC\Sguan_printf.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_Config.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_IQmath.h)(0x6A6DCEC2)
 I (..\SguanFOC\UserData_Config.h)(0x6A6DCEC2)
-I (..\SguanFOC\UserData_Function.h)(0x6A6DFFE8)
+I (..\SguanFOC\UserData_Function.h)(0x6A6E0815)
 I (..\Core\Inc\main.h)(0x6A6DCEC0)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal.h)(0x6A2E34AA)
 I (..\Core\Inc\stm32g4xx_hal_conf.h)(0x6A6DCEC0)
@@ -1210,8 +1211,9 @@ I (..\Core\Inc\tim.h)(0x6A6DCEC0)
 I (..\Core\Inc\adc.h)(0x6A6DCEC0)
 I (..\Core\Inc\usart.h)(0x6A6DCEC0)
 I (..\Hardware\Timer.h)(0x6A6DCEC0)
-I (..\SguanFOC\UserData_UserControl.h)(0x6A6DFBD9)
-I (..\SguanFOC\SguanFOC.h)(0x6A6DCEC2)
+I (..\BSP\BSP_MT6816.h)(0x6A6E0425)
+I (..\SguanFOC\UserData_UserControl.h)(0x6A6E07E1)
+I (..\SguanFOC\SguanFOC.h)(0x6A6ED1EC)
 I (..\SguanFOC\Sguan_Filter.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_MotorStatus.h)(0x6A6DCEC2)
 I (..\SguanFOC\UserData_Status.h)(0x6A6DCEC2)
@@ -1234,8 +1236,8 @@ I (..\SguanFOC\Sguan_Config.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_IQmath.h)(0x6A6DCEC2)
 I (..\SguanFOC\UserData_Config.h)(0x6A6DCEC2)
 F (..\SguanFOC\Sguan_SVPWM.h)(0x6A6DCEC2)()
-F (..\SguanFOC\SguanFOC.c)(0x6A6DFAEF)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/sguanfoc.o -MMD)
-I (..\SguanFOC\SguanFOC.h)(0x6A6DCEC2)
+F (..\SguanFOC\SguanFOC.c)(0x6A6ED1EC)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/sguanfoc.o -MMD)
+I (..\SguanFOC\SguanFOC.h)(0x6A6ED1EC)
 I (..\SguanFOC\Sguan_Config.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_IQmath.h)(0x6A6DCEC2)
 I (..\SguanFOC\UserData_Config.h)(0x6A6DCEC2)
@@ -1281,21 +1283,22 @@ I (..\SguanFOC\Sguan_PID.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_PLL.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_STA.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_SVPWM.h)(0x6A6DCEC2)
-I (..\SguanFOC\UserData_Function.h)(0x6A6DFFE8)
+I (..\SguanFOC\UserData_Function.h)(0x6A6E0815)
 I (..\Core\Inc\tim.h)(0x6A6DCEC0)
 I (..\Core\Inc\adc.h)(0x6A6DCEC0)
 I (..\Core\Inc\usart.h)(0x6A6DCEC0)
 I (..\Hardware\Timer.h)(0x6A6DCEC0)
-I (..\SguanFOC\UserData_Motor.h)(0x6A6DCEC2)
+I (..\BSP\BSP_MT6816.h)(0x6A6E0425)
+I (..\SguanFOC\UserData_Motor.h)(0x6A6EDADD)
 I (..\SguanFOC\UserData_Parameter.h)(0x6A6DCEC2)
-I (..\SguanFOC\UserData_UserControl.h)(0x6A6DFBD9)
-F (..\SguanFOC\SguanFOC.h)(0x6A6DCEC2)()
+I (..\SguanFOC\UserData_UserControl.h)(0x6A6E07E1)
+F (..\SguanFOC\SguanFOC.h)(0x6A6ED1EC)()
 F (..\SguanFOC\UserData_Config.h)(0x6A6DCEC2)()
-F (..\SguanFOC\UserData_Function.h)(0x6A6DFFE8)()
-F (..\SguanFOC\UserData_Motor.h)(0x6A6DCEC2)()
+F (..\SguanFOC\UserData_Function.h)(0x6A6E0815)()
+F (..\SguanFOC\UserData_Motor.h)(0x6A6EDADD)()
 F (..\SguanFOC\UserData_Parameter.h)(0x6A6DCEC2)()
 F (..\SguanFOC\UserData_Status.h)(0x6A6DCEC2)()
-F (..\SguanFOC\UserData_UserControl.h)(0x6A6DFBD9)()
+F (..\SguanFOC\UserData_UserControl.h)(0x6A6E07E1)()
 F (..\Hardware\Timer.c)(0x6A6DCEC0)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/timer.o -MMD)
 I (..\Hardware\Timer.h)(0x6A6DCEC0)
 I (..\Core\Inc\tim.h)(0x6A6DCEC0)
@@ -1332,7 +1335,7 @@ I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_tim_ex.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart.h)(0x6A2E34AA)
 I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart_ex.h)(0x6A2E34AA)
 I (..\Core\Inc\adc.h)(0x6A6DCEC0)
-I (..\SguanFOC\SguanFOC.h)(0x6A6DCEC2)
+I (..\SguanFOC\SguanFOC.h)(0x6A6ED1EC)
 I (..\SguanFOC\Sguan_Config.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_IQmath.h)(0x6A6DCEC2)
 I (..\SguanFOC\UserData_Config.h)(0x6A6DCEC2)
@@ -1347,9 +1350,43 @@ I (..\SguanFOC\Sguan_PLL.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_STA.h)(0x6A6DCEC2)
 I (..\SguanFOC\Sguan_SVPWM.h)(0x6A6DCEC2)
 F (..\BSP\BSP_ADC.c)(0x6A6DCEC0)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/bsp_adc.o -MMD)
-F (..\BSP\BSP_ADC.h)(0x6A6DCEC0)()
-F (..\BSP\BSP_MT6816.c)(0x6A6DCEC0)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/bsp_mt6816.o -MMD)
-F (..\BSP\BSP_MT6816.h)(0x6A6DCEC0)()
+F (..\BSP\BSP_ADC.h)(0x6A6ECF27)()
+F (..\BSP\BSP_MT6816.c)(0x6A6E0450)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/bsp_mt6816.o -MMD)
+I (..\BSP\BSP_MT6816.h)(0x6A6E0425)
+I (..\Core\Inc\spi.h)(0x6A6DCEC0)
+I (..\Core\Inc\main.h)(0x6A6DCEC0)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal.h)(0x6A2E34AA)
+I (..\Core\Inc\stm32g4xx_hal_conf.h)(0x6A6DCEC0)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_rcc.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_def.h)(0x6A2E34AA)
+I (..\Drivers\CMSIS\Device\ST\STM32G4xx\Include\stm32g4xx.h)(0x6A2E34AA)
+I (..\Drivers\CMSIS\Device\ST\STM32G4xx\Include\stm32g431xx.h)(0x6A2E34AA)
+I (..\Drivers\CMSIS\Include\core_cm4.h)(0x6A2E345E)
+I (..\Drivers\CMSIS\Device\ST\STM32G4xx\Include\system_stm32g4xx.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\Legacy\stm32_hal_legacy.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_rcc_ex.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_gpio.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_gpio_ex.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_dma.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_dma_ex.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_cortex.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_adc.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_ll_adc.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_adc_ex.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_exti.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_fdcan.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_flash.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_flash_ex.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_flash_ramfunc.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_pwr.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_pwr_ex.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_spi.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_spi_ex.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_tim.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_tim_ex.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart.h)(0x6A2E34AA)
+I (..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart_ex.h)(0x6A2E34AA)
+F (..\BSP\BSP_MT6816.h)(0x6A6E0425)()
 F (..\BSP\BSP_RGB.c)(0x6A6DF481)(-xc -std=c99 --target=arm-arm-none-eabi -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -c-fno-rtti -funsigned-char -fshort-enums -fshort-wchar-gdwarf-4 -O3 -ffunction-sections -Wno-packed -Wno-missing-variable-declarations -Wno-missing-prototypes -Wno-missing-noreturn -Wno-sign-conversion -Wno-nonportable-include-path -Wno-reserved-id-macro -Wno-unused-macros -Wno-documentation-unknown-command -Wno-documentation -Wno-license-management -Wno-parentheses-equality -Wno-reserved-identifier -I ../Core/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc -I ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I ../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I ../Drivers/CMSIS/Include -I ../Hardware -I ../SguanFOC -I ../BSP-I./RTE/_GIM6010_V0.0-IC:/Users/18261/AppData/Local/Arm/Packs/ARM/CMSIS/6.1.0/CMSIS/Core/Include-IC:/Users/18261/AppData/Local/Arm/Packs/Keil/STM32G4xx_DFP/1.6.0/Drivers/CMSIS/Device/ST/STM32G4xx/Include-D__UVISION_VERSION="542" -DSTM32G431xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32G431xx-o gim6010_v0.0/bsp_rgb.o -MMD)
 I (..\BSP\BSP_RGB.h)(0x6A6DCEC0)
 I (..\Core\Inc\main.h)(0x6A6DCEC0)

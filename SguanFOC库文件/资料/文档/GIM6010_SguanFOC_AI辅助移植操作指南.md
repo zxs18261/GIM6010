@@ -336,7 +336,7 @@ Sguan.motor.Encoder_Dir = 1;   // 或 -1，根据实物方向调整
 
 | 参数 | 说明 | 建议初值 |
 |------|------|----------|
-| `VBUS_MAX / VBUS_MIM` | 母线电压上下限 | 按实际电源设置 |
+| `VBUS_MAX / VBUS_MIN` | 母线电压上下限 | 按实际电源设置 |
 | `DQcur_MAX` | D/Q 轴电流上限 | 先设 0.5A 测试 |
 | `Temp_MAX` | 最高温度 | 60°C |
 | `Current_limit` | 状态机电流阈值 | 0.5A |

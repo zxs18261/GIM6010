@@ -1079,7 +1079,7 @@ static void Status_VBUS_OVERVOLTAGE(SguanFOC_System_STRUCT *sguan,uint32_t *coun
 
 // Status判断欠压保护状态
 static void Status_VBUS_UNDERVOLTAGE(SguanFOC_System_STRUCT *sguan,uint32_t *count){
-    if (sguan->foc.Real_VBUS < sguan->safe.VBUS_MIM){
+    if (sguan->foc.Real_VBUS < sguan->safe.VBUS_MIN){
         Status_Switch_STANDBY(sguan,count);
     }
 }
@@ -1147,7 +1147,7 @@ static void Status_Switch_Loop(SguanFOC_System_STRUCT *sguan){
             sguan->status = MOTOR_STATUS_OVERVOLTAGE;
         }
         else if ((sguan->status != MOTOR_STATUS_UNDERVOLTAGE) && 
-            sguan->foc.Real_VBUS < sguan->safe.VBUS_MIM){
+            sguan->foc.Real_VBUS < sguan->safe.VBUS_MIN){
             sguan->status = MOTOR_STATUS_UNDERVOLTAGE;
         }
     }
@@ -1548,9 +1548,9 @@ static void Sguan_Start_Tick(void){
         #else // CONFIG_Q31
         Offset_CurrentRead_q31(&Sguan);
         #endif // CONFIG_Q31
-        //电机回零操作
-        Sguan_Positioning_Set(&Sguan,0.3f*Sguan.motor.VBUS,0.0f);
-        User_Delay(1200);
+        // 电机回零：Ud 比例见 UserData_Config.h 的 USER_ALIGN_UD_RATIO（勿用 0.3，小电源易 OCP）
+        Sguan_Positioning_Set(&Sguan, USER_ALIGN_UD_RATIO * Sguan.motor.VBUS, 0.0f);
+        User_Delay(USER_ALIGN_HOLD_MS);
         // 读取角度偏置
         #if !CONFIG_Q31
         Offset_EncoderRead(&Sguan);
@@ -1558,8 +1558,8 @@ static void Sguan_Start_Tick(void){
         Offset_EncoderRead_q31(&Sguan);
         #endif // CONFIG_Q31
         // 电机失能并进入正常工作状态
-        Sguan_Positioning_Set(&Sguan,0.0f,0.0f);
-        User_Delay(800);
+        Sguan_Positioning_Set(&Sguan, 0.0f, 0.0f);
+        User_Delay(USER_ALIGN_RELEASE_MS);
         // 判断电机的极性,如果是SPMSM,D轴给定,可能停在0或者180度位置
         // 暂时还未书写
         //正常工作中(状态机运行)

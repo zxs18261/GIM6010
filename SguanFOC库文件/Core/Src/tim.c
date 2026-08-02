@@ -147,7 +147,11 @@ void MX_TIM2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM2_Init 2 */
-
+  /* Cube 默认 Period=0xFFFFFFFF（约数十秒才溢出一次）→ 控制环几乎不跑。
+   * 改为 1kHz：TIM2CLK=170MHz 时 f = 170M / (169+1) / (999+1) = 1kHz */
+  htim2.Instance->PSC = 169U;
+  htim2.Instance->ARR = 999U;
+  htim2.Instance->EGR = TIM_EGR_UG;
   /* USER CODE END TIM2_Init 2 */
 
 }

@@ -34,9 +34,10 @@ gim6010_v0.0/sguan_printf.o: ..\SguanFOC\Sguan_printf.c \
   ..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart.h \
   ..\Drivers\STM32G4xx_HAL_Driver\Inc\stm32g4xx_hal_uart_ex.h \
   ..\Core\Inc\tim.h ..\Core\Inc\adc.h ..\Core\Inc\usart.h \
-  ..\Hardware\Timer.h ..\SguanFOC\UserData_UserControl.h \
-  ..\SguanFOC\SguanFOC.h ..\SguanFOC\Sguan_Filter.h \
-  ..\SguanFOC\Sguan_MotorStatus.h ..\SguanFOC\UserData_Status.h \
-  ..\BSP\BSP_RGB.h ..\SguanFOC\Sguan_Optimize.h ..\SguanFOC\Sguan_PID.h \
+  ..\Hardware\Timer.h ..\BSP\BSP_MT6816.h \
+  ..\SguanFOC\UserData_UserControl.h ..\SguanFOC\SguanFOC.h \
+  ..\SguanFOC\Sguan_Filter.h ..\SguanFOC\Sguan_MotorStatus.h \
+  ..\SguanFOC\UserData_Status.h ..\BSP\BSP_RGB.h \
+  ..\SguanFOC\Sguan_Optimize.h ..\SguanFOC\Sguan_PID.h \
   ..\SguanFOC\Sguan_PLL.h ..\SguanFOC\Sguan_STA.h \
   ..\SguanFOC\Sguan_SVPWM.h
