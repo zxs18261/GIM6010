@@ -34,7 +34,7 @@ void SVPWM(float u_alpha, float u_beta,
     float u3 = 0.8660254037844386f * u_alpha - 0.5f * u_beta;
     
     // 2.扇区数值计算
-    uint8_t sector = (u1 > 0.0f) + ((u2 > 0.0f) << 1) + ((u3 > 0.0f) << 2);
+    uint8_t sector = (u1 > 0.0f) + ((u2 > 0.0f) << 1) + ((u3 > 0.0f) << 2);//  N=A+2B+4C
     
     float t_a, t_b, t_c;
     float k_svpwm;
@@ -44,7 +44,7 @@ void SVPWM(float u_alpha, float u_beta,
         float t4 = u3;
         float t6 = u1;
         float sum = t4 + t6;
-        if (sum > ts) {
+        if (sum > ts) {      // 限幅处理 防止超调
             k_svpwm = ts / sum;
             t4 = k_svpwm * t4;
             t6 = k_svpwm * t6;
@@ -162,7 +162,7 @@ void SVPWM_q31(Q31_t u_alpha, Q31_t u_beta,
     Q31_t u2 = IQmath_Q31_mul(-1859775360,u_alpha) - IQmath_Q31_mul(Q31_HALF,u_beta);
     Q31_t u3 = IQmath_Q31_mul(1859775360,u_alpha) - IQmath_Q31_mul(Q31_HALF,u_beta);
     
-    uint8_t sector = (u1 > 0) + ((u2 > 0) << 1) + ((u3 > 0) << 2);
+    uint8_t sector = (u1 > 0) + ((u2 > 0) << 1) + ((u3 > 0) << 2);//  N=A+2B+4C
     
     Q31_t t_a, t_b, t_c;
     Q31_t k_svpwm;
