@@ -13,7 +13,6 @@
 #define WS2812_BIT_COUNT        (24U)
 #define WS2812_RESET_SLOTS      (80U)
 #define WS2812_BUF_LEN          (WS2812_BIT_COUNT + WS2812_RESET_SLOTS)
-#define BSP_RGB_DMA_IRQ_PRIO    (8U)
 
 /* Private variables ---------------------------------------------------------*/
 static const BSP_RGB_Color_t s_palette[BSP_RGB_ID_COUNT] =
@@ -77,9 +76,8 @@ const BSP_RGB_RainbowBreathCfg_t BSP_RGB_RAINBOW =
     .huePeriodMs    = 6000U,
 };
 
-static DMA_HandleTypeDef hdma_tim4_ch2;
-
 static uint32_t pwmBuf[WS2812_BUF_LEN];
+static volatile uint8_t  ready = 0U;
 static volatile uint8_t  busy = 0U;
 static volatile uint8_t  pending = 0U;
 static volatile uint32_t targetGrb = 0U;
@@ -90,6 +88,7 @@ static uint8_t curB = 0U;
 
 /* Private function prototypes -----------------------------------------------*/
 static void BSP_RGB_Encode(uint32_t grb);
+static uint8_t BSP_RGB_CubeInterfaceReady(void);
 static void BSP_RGB_RefreshTarget(void);
 static void BSP_RGB_OutputLevel(uint8_t r, uint8_t g, uint8_t b, uint8_t level);
 static uint8_t BSP_RGB_ClampLevel(uint8_t level);
@@ -111,56 +110,22 @@ const BSP_RGB_Color_t *BSP_RGB_GetColor(BSP_RGB_ColorId_t id)
 
 void BSP_RGB_Init(void)
 {
-    TIM_OC_InitTypeDef sConfigOC = {0};
-
-    htim4.Init.Prescaler         = 0U;
-    htim4.Init.CounterMode       = TIM_COUNTERMODE_UP;
-    htim4.Init.Period            = BSP_RGB_WS2812_ARR;
-    htim4.Init.ClockDivision     = TIM_CLOCKDIVISION_DIV1;
-    htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
-    if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
-    {
-        Error_Handler();
-    }
-
-    sConfigOC.OCMode     = TIM_OCMODE_PWM1;
-    sConfigOC.Pulse      = 0U;
-    sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-    sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-    if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-    {
-        Error_Handler();
-    }
-
-    __HAL_RCC_DMAMUX1_CLK_ENABLE();
-    __HAL_RCC_DMA1_CLK_ENABLE();
-
-    hdma_tim4_ch2.Instance                 = DMA1_Channel3;
-    hdma_tim4_ch2.Init.Request             = DMA_REQUEST_TIM4_CH2;
-    hdma_tim4_ch2.Init.Direction           = DMA_MEMORY_TO_PERIPH;
-    hdma_tim4_ch2.Init.PeriphInc           = DMA_PINC_DISABLE;
-    hdma_tim4_ch2.Init.MemInc              = DMA_MINC_ENABLE;
-    hdma_tim4_ch2.Init.PeriphDataAlignment = DMA_PDATAALIGN_WORD;
-    hdma_tim4_ch2.Init.MemDataAlignment    = DMA_MDATAALIGN_WORD;
-    hdma_tim4_ch2.Init.Mode                = DMA_NORMAL;
-    hdma_tim4_ch2.Init.Priority            = DMA_PRIORITY_LOW;
-    if (HAL_DMA_Init(&hdma_tim4_ch2) != HAL_OK)
-    {
-        Error_Handler();
-    }
-    __HAL_LINKDMA(&htim4, hdma[TIM_DMA_ID_CC2], hdma_tim4_ch2);
-
-    HAL_NVIC_SetPriority(DMA1_Channel3_IRQn, BSP_RGB_DMA_IRQ_PRIO, 0U);
-    HAL_NVIC_EnableIRQ(DMA1_Channel3_IRQn);
-
     brightness = BSP_RGB_DEFAULT_BRIGHTNESS;
+    busy = 0U;
+    pending = 0U;
+    ready = BSP_RGB_CubeInterfaceReady();
+    if (ready == 0U)
+    {
+        return;
+    }
+
     BSP_RGB_Off();
     BSP_RGB_Poll();
 }
 
 void BSP_RGB_Poll(void)
 {
-    if ((pending != 0U) && (busy == 0U))
+    if ((ready != 0U) && (pending != 0U) && (busy == 0U))
     {
         busy    = 1U;
         pending = 0U;
@@ -202,11 +167,6 @@ void BSP_RGB_SetColorRGB(uint32_t rgb)
 void BSP_RGB_Off(void)
 {
     BSP_RGB_SetColor(0U, 0U, 0U);
-}
-
-void BSP_RGB_DmaIRQHandler(void)
-{
-    HAL_DMA_IRQHandler(&hdma_tim4_ch2);
 }
 
 void BSP_RGB_Solid(BSP_RGB_ColorId_t colorId, uint8_t level)
@@ -379,6 +339,32 @@ static void BSP_RGB_Encode(uint32_t grb)
     {
         pwmBuf[i] = 0U;
     }
+}
+
+static uint8_t BSP_RGB_CubeInterfaceReady(void)
+{
+    DMA_HandleTypeDef *hdma = htim4.hdma[TIM_DMA_ID_CC2];
+
+    if ((htim4.Instance != TIM4) ||
+        (htim4.Init.Prescaler != 0U) ||
+        (htim4.Init.CounterMode != TIM_COUNTERMODE_UP) ||
+        (htim4.Init.Period != BSP_RGB_WS2812_ARR) ||
+        (hdma == NULL))
+    {
+        return 0U;
+    }
+
+    if ((hdma->Init.Direction != DMA_MEMORY_TO_PERIPH) ||
+        (hdma->Init.PeriphInc != DMA_PINC_DISABLE) ||
+        (hdma->Init.MemInc != DMA_MINC_ENABLE) ||
+        (hdma->Init.PeriphDataAlignment != DMA_PDATAALIGN_WORD) ||
+        (hdma->Init.MemDataAlignment != DMA_MDATAALIGN_WORD) ||
+        (hdma->Init.Mode != DMA_NORMAL))
+    {
+        return 0U;
+    }
+
+    return 1U;
 }
 
 static void BSP_RGB_RefreshTarget(void)

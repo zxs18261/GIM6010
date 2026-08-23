@@ -14,7 +14,7 @@
 #include "Sguan_SVPWM.h"
 /* USER CODE END Includes */
 
-#define Velocity_OPEN_MODE          0x00 // 速度开环(Uq_in电机方向测试和电机参数测算)
+#define Velocity_OPEN_MODE          0x00 // 纯开环FOC(VO积分电角度，AO直接给定Uq)
 #define Current_SINGLE_MODE         0x01 // 电流单闭环(力矩控制)
 #define VelCur_DOUBLE_MODE          0x02 // 速度-电流串级闭环控制
 #define PosVelCur_THREE_MODE        0x03 // 位置-速度-电流多环

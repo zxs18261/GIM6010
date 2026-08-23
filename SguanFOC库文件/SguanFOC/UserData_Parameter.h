@@ -49,12 +49,12 @@ static inline void User_ParameterSet(void){
     Sguan.control.Position.Kp = 7.0f;               // 高性能伺服三环pos(核心参数)
     Sguan.control.Position.Ki = 0.0f;               // 高性能伺服三环pos(参数)
     Sguan.control.Position.Kd = 0.0f;               // 高性能伺服三环pos(核心参数)
-    Sguan.control.Position.OutMax = 205.3f;         // 电机轴额定角速度 [rad/s]（1960 rpm）
-    Sguan.control.Position.OutMin = -205.3f;
+    Sguan.control.Position.OutMax = GIM6010_MOTOR_MAX_RAD_S;  // 电机轴速度上限，对应输出轴额定的1.2倍
+    Sguan.control.Position.OutMin = -GIM6010_MOTOR_MAX_RAD_S;
     Sguan.control.Position.IntMax = 150.0f;         // 高性能伺服三环pos->积分项上限(默认参数)
     Sguan.control.Position.IntMin = -150.0f;        // 高性能伺服三环pos->积分项下限(默认参数)
 
-    Sguan.control.Response = 5;                     // (uint8_t)响应带宽倍数(核心参数)
+    Sguan.control.Response = USER_CONTROL_RESPONSE;  // 20 kHz 下：速度环 1 kHz、位置环 50 Hz（先稳后提速）
     // 3.pll锁相环跟踪系统
     Sguan.encoder.pll.Kp = 650.0f;                  // 锁相环比例项增益(核心参数)
     Sguan.encoder.pll.Ki = 210000.0f;               // 锁相环积分项增益(核心参数)

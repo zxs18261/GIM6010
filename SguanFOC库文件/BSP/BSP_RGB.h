@@ -138,8 +138,6 @@ void    BSP_RGB_Poll(void);
 void    BSP_RGB_SetBrightness(uint8_t brightness);   /*!< 全局亮度 0~255 */
 uint8_t BSP_RGB_GetBrightness(void);
 void    BSP_RGB_Off(void);
-void    BSP_RGB_DmaIRQHandler(void);
-
 const BSP_RGB_Color_t *BSP_RGB_GetColor(BSP_RGB_ColorId_t id);
 
 /* ============================ 灯效 API（推荐） ========================== */

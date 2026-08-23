@@ -57,6 +57,7 @@ void PendSV_Handler(void);
 void SysTick_Handler(void);
 void DMA1_Channel1_IRQHandler(void);
 void DMA1_Channel2_IRQHandler(void);
+void DMA1_Channel4_IRQHandler(void);
 void ADC1_2_IRQHandler(void);
 void TIM1_BRK_TIM15_IRQHandler(void);
 void TIM1_UP_TIM16_IRQHandler(void);
@@ -64,10 +65,12 @@ void TIM1_TRG_COM_TIM17_IRQHandler(void);
 void TIM1_CC_IRQHandler(void);
 void TIM2_IRQHandler(void);
 void TIM4_IRQHandler(void);
-void SPI1_IRQHandler(void);
 void USART1_IRQHandler(void);
+void SPI3_IRQHandler(void);
+void DMA2_Channel1_IRQHandler(void);
+void DMA2_Channel2_IRQHandler(void);
 /* USER CODE BEGIN EFP */
-void DMA1_Channel3_IRQHandler(void);  /* BSP_RGB，非 CubeMX 生成 */
+
 /* USER CODE END EFP */
 
 #ifdef __cplusplus

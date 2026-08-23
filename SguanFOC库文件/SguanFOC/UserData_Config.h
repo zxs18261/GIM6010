@@ -67,17 +67,41 @@
 #define Open_Printf_Debug 0
 
 
-// 定时器中断参数设计
-#define TIM_T 1e-4                          // 最大频率的控制周期
+/*
+ * 控制时基：TIM1=170 MHz、中心对齐、ARR=4249 -> 20 kHz PWM。
+ * High_Loop 由 ADC1 注入转换完成中断驱动；只有实测该回调为 20 kHz 时才能使用此值。
+ * 若 CubeMX 修改 TIM1 ARR 或 ADC 触发次数，必须同步更新这里的宏。
+ */
+#define USER_FOC_CONTROL_HZ       (20000U)
+#define USER_TIM1_PWM_ARR         (4249U)
+#define TIM_T                     (1.0f / (float)USER_FOC_CONTROL_HZ)
+
+/* MT6816 每 5 个 20 kHz FOC 周期请求一次 SPI DMA 采样，即 4 kHz。 */
+#define USER_ENCODER_SAMPLE_HZ    (4000U)
+#define USER_ENCODER_SAMPLE_DIV   (USER_FOC_CONTROL_HZ / USER_ENCODER_SAMPLE_HZ)
+
+/* JustFloat：21 通道 = 88 B，921600-8N1 下 500 Hz 约占 48% 链路带宽。 */
+#define USER_VOFA_TX_HZ           (500U)
+#define USER_VOFA_TX_PERIOD_MS    (1000U / USER_VOFA_TX_HZ)
+
+/* 20 kHz 下沿用库的 Response / Response² 分频：速度环 1 kHz、位置环 50 Hz。
+ * 这是首次闭环上电的保守起点；位置环参数整定完成后再单独提高。 */
+#define USER_CONTROL_RESPONSE     (20U)
 
 /* ================= GIM6010 24V 规格常量（见 资料/文档/GIM6010_电机参数规格书(24V).md） ================= */
-#define GIM6010_GEAR_RATIO          8.0f        // 减速比 8:1
-#define GIM6010_ENCODER_BITS        14          // 本板 MT6816 位数（模块内置为 16bit）
-#define GIM6010_RATED_CURRENT_A     6.6f        // 额定电流 [A]
-#define GIM6010_PEAK_CURRENT_A      30.47f      // 堵转/峰值电流 [A]
-#define GIM6010_SHAFT_RATED_RAD_S   25.66f      // 输出轴额定角速度 [rad/s]（245 rpm）
-#define GIM6010_MOTOR_RATED_RAD_S   205.3f      // 电机轴额定角速度 [rad/s]（1960 rpm）
-#define GIM6010_KT_NM_A             0.61f       // 扭矩常数 [N·m/A]
+#define GIM6010_GEAR_RATIO              8.0f        // 减速比 8:1
+#define GIM6010_ENCODER_BITS            14          // 本板 MT6816 位数（模块内置为 16bit）
+#define GIM6010_RATED_CURRENT_A         6.6f        // 额定连续电流 [A]
+#define GIM6010_PEAK_CURRENT_A          30.47f      // 堵转/瞬时峰值电流 [A]
+#define GIM6010_OUTPUT_RATED_TORQUE_NM  4.85f       // 输出轴额定连续转矩 [N·m]
+#define GIM6010_OUTPUT_PEAK_TORQUE_NM   12.39f      // 输出轴堵转/瞬时峰值转矩 [N·m]
+#define GIM6010_SHAFT_RATED_RPM         245.0f      // 输出轴额定转速 [rpm]
+#define GIM6010_SHAFT_RATED_RAD_S       25.656340f  // 输出轴额定角速度 [rad/s]
+#define GIM6010_SPEED_MARGIN_RATIO      1.2f        // 用户要求：速度命令预留 1.2 倍额定裕量
+#define GIM6010_SHAFT_MAX_RAD_S         (GIM6010_SHAFT_RATED_RAD_S * GIM6010_SPEED_MARGIN_RATIO)
+#define GIM6010_MOTOR_RATED_RAD_S       (GIM6010_SHAFT_RATED_RAD_S * GIM6010_GEAR_RATIO)
+#define GIM6010_MOTOR_MAX_RAD_S         (GIM6010_SHAFT_MAX_RAD_S * GIM6010_GEAR_RATIO)
+#define GIM6010_KT_NM_A                 0.61f       // 厂家扭矩常数 [N·m/A]，轴侧定义待台架确认
 
 /**
  * @description: 上电校准“转子回零”的 d 轴电压比例 Ud = 比例 × VBUS

@@ -10,6 +10,7 @@
  * Copyright (c) 2026 by $星必尘Sguan, All Rights Reserved. 
  */
 #include "SguanFOC.h"
+#include <string.h>
 
 /* USER CODE BEGIN Includes */
 // 电机控制User用户设置声明
@@ -327,7 +328,7 @@ static void Sguan_Calculate_Loop(SguanFOC_System_STRUCT *sguan){
     sguan->current.Real_Iq = sguan->lpf.CurrentQ.filter.Output;
 }
 
-// Control速度开环(用于直接控制Uq_in,用于电机测试)
+// Control纯开环FOC：User_UserControl生成电角度并直接给定Ud/Uq，本层仅处理非工作状态归零。
 static void Control_Velocity_OPEN(SguanFOC_System_STRUCT *sguan){
     // 如果不在正常工作状态，则赋值为零
     if (sguan->status < 4){
@@ -1410,10 +1411,12 @@ static void Printf_Debug_Loop(SguanFOC_System_STRUCT *sguan){
 #else // Open_Printf_Debug
 // Printf电机数据正常发送
 static void Printf_Normal_Loop(SguanFOC_System_STRUCT *sguan){
-    // 用户数据填写(串口或者CAN通信)
-    User_UserTX();
-    // 发送数据to上位机
-    Printf_Loop(&Sguan.TXdata);
+    (void)sguan;
+    if (Printf_TxSlotDue() != 0U){
+        /* 仅在 DMA 已空闲时填充并复制，避免 TXdata 被下一帧改写。 */
+        User_UserTX();
+        Printf_Loop(&Sguan.TXdata);
+    }
 }
 #endif // Open_Printf_Debug
 
@@ -1551,6 +1554,11 @@ static void Sguan_Start_Tick(void){
         // 电机回零：Ud 比例见 UserData_Config.h 的 USER_ALIGN_UD_RATIO（勿用 0.3，小电源易 OCP）
         Sguan_Positioning_Set(&Sguan, USER_ALIGN_UD_RATIO * Sguan.motor.VBUS, 0.0f);
         User_Delay(USER_ALIGN_HOLD_MS);
+        /* 对齐延时内持续服务 MT6816 DMA；无新鲜样本不能写入位置零点。 */
+        if (BSP_MT6816_IsSampleFresh() == 0U){
+            Sguan.status = MOTOR_STATUS_ENCODER_ERROR;
+            return;
+        }
         // 读取角度偏置
         #if !CONFIG_Q31
         Offset_EncoderRead(&Sguan);
@@ -1560,6 +1568,10 @@ static void Sguan_Start_Tick(void){
         // 电机失能并进入正常工作状态
         Sguan_Positioning_Set(&Sguan, 0.0f, 0.0f);
         User_Delay(USER_ALIGN_RELEASE_MS);
+        if (BSP_MT6816_IsSampleFresh() == 0U){
+            Sguan.status = MOTOR_STATUS_ENCODER_ERROR;
+            return;
+        }
         // 判断电机的极性,如果是SPMSM,D轴给定,可能停在0或者180度位置
         // 暂时还未书写
         //正常工作中(状态机运行)
@@ -1579,17 +1591,23 @@ void SguanFOC_High_Loop(void){
         Sguan.flag.PWM_Calc = 1;
 
         // 如果在初始化完成，进入函数
-        if (Sguan.status > 3 && Sguan.status < 19){       
-            #if !CONFIG_Q31     
-            // 计算编码器和电流
-            Sguan_Calculate_Loop(&Sguan);
-            // 运算PID并执行SVPWM(如果计算超时，会更新错误状态并停用此线程)
-            Sguan_GeneratePWM_Loop(&Sguan);
-            #else // CONFIG_Q31
-            IQmath_Calculate_High_Tick_q31(&Sguan);
-            Sguan_Calculate_Loop_q31(&Sguan);
-            Sguan_GeneratePWM_Loop_q31(&Sguan);
-            #endif // CONFIG_Q31
+        if (Sguan.status > 3 && Sguan.status < 19){
+            /* 缓存过期/通信错误时不能继续按陈旧电角度输出转矩。 */
+            if (BSP_MT6816_IsSampleFresh() == 0U){
+                Sguan.status = MOTOR_STATUS_ENCODER_ERROR;
+            }
+            else{
+                #if !CONFIG_Q31
+                // 计算编码器和电流
+                Sguan_Calculate_Loop(&Sguan);
+                // 运算PID并执行SVPWM(如果计算超时，会更新错误状态并停用此线程)
+                Sguan_GeneratePWM_Loop(&Sguan);
+                #else // CONFIG_Q31
+                IQmath_Calculate_High_Tick_q31(&Sguan);
+                Sguan_Calculate_Loop_q31(&Sguan);
+                Sguan_GeneratePWM_Loop_q31(&Sguan);
+                #endif // CONFIG_Q31
+            }
         }
         if (Sguan.status >= 19){
             static uint8_t status = 0xFF;
@@ -1678,28 +1696,15 @@ void SguanFOC_Low_Loop(void){
  * @return {*}
  */
 void SguanFOC_Printf_Loop(uint8_t *data, uint16_t length){
+    if (data == NULL) {
+        return;
+    }
     if(length > sizeof(Sguan_PrintfBuff)){
         length = sizeof(Sguan_PrintfBuff);
     }
 
-    for(uint16_t i = 0; i < length; i++){
-        if(data[i] == '?'){
-            Printf_Adjust();
-            // 内存对齐的优化清零
-            uint32_t *p32 = (uint32_t*)Sguan_PrintfBuff;
-            uint16_t size = sizeof(Sguan_PrintfBuff);
-            // 按4字节清空
-            for(uint16_t j = 0; j < size / 4; j++){
-                p32[j] = 0;
-            }
-            // 处理剩余字节
-            uint8_t *p8 = (uint8_t*)&p32[size / 4];
-            for(uint16_t j = 0; j < size % 4; j++){
-                p8[j] = 0;
-            }
-            break;
-        }
-    }
+    (void)Printf_Adjust(data, length);
+    memset(Sguan_PrintfBuff, 0, sizeof(Sguan_PrintfBuff));
 }
 
 /**
@@ -1708,6 +1713,8 @@ void SguanFOC_Printf_Loop(uint8_t *data, uint16_t length){
  * @return {*}
  */
 void SguanFOC_main_Loop(void){
+    /* SPI3 DMA 采样服务在主循环运行；High_Loop 只投递请求、只读缓存。 */
+    BSP_MT6816_Service();
     Sguan_Start_Tick();
     #if !Printf_Debug
     if (Sguan.status > 3 && Sguan.status < 19){

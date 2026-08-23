@@ -40,7 +40,7 @@ void SVPWM(float u_alpha, float u_beta,
     float k_svpwm;
     
     // 3.PWM占用时间幅值
-    if (sector == 5) {
+    if (sector == 5) {       //不同扇区
         float t4 = u3;
         float t6 = u1;
         float sum = t4 + t6;
@@ -57,7 +57,7 @@ void SVPWM(float u_alpha, float u_beta,
         float t2 = -u3;
         float t6 = -u2;
         float sum = t2 + t6;
-        if (sum > ts) {
+        if (sum > ts) {      // 限幅处理 防止超调
             k_svpwm = ts / sum;
             t2 = k_svpwm * t2;
             t6 = k_svpwm * t6;
@@ -70,7 +70,7 @@ void SVPWM(float u_alpha, float u_beta,
         float t2 = u1;
         float t3 = u2;
         float sum = t2 + t3;
-        if (sum > ts) {
+        if (sum > ts) {      // 限幅处理 防止超调   
             k_svpwm = ts / sum;
             t2 = k_svpwm * t2;
             t3 = k_svpwm * t3;

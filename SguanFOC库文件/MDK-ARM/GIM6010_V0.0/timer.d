@@ -37,4 +37,4 @@ gim6010_v0.0/timer.o: ..\Hardware\Timer.c ..\Hardware\Timer.h \
   ..\SguanFOC\UserData_Status.h ..\BSP\BSP_RGB.h \
   ..\SguanFOC\Sguan_printf.h ..\SguanFOC\Sguan_Optimize.h \
   ..\SguanFOC\Sguan_PID.h ..\SguanFOC\Sguan_PLL.h \
-  ..\SguanFOC\Sguan_STA.h ..\SguanFOC\Sguan_SVPWM.h
+  ..\SguanFOC\Sguan_STA.h ..\SguanFOC\Sguan_SVPWM.h ..\BSP\BSP_MT6816.h

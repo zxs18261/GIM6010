@@ -38,4 +38,4 @@ gim6010_v0.0/main.o: ..\Core\Src\main.c ..\Core\Inc\main.h \
   ..\SguanFOC\UserData_Status.h ..\BSP\BSP_RGB.h \
   ..\SguanFOC\Sguan_printf.h ..\SguanFOC\Sguan_Optimize.h \
   ..\SguanFOC\Sguan_PID.h ..\SguanFOC\Sguan_PLL.h \
-  ..\SguanFOC\Sguan_STA.h ..\SguanFOC\Sguan_SVPWM.h ..\BSP\BSP_MT6816.h
+  ..\SguanFOC\Sguan_STA.h ..\SguanFOC\Sguan_SVPWM.h

@@ -97,7 +97,6 @@ int main(void)
   MX_ADC1_Init();
   MX_ADC2_Init();
   MX_FDCAN1_Init();
-  MX_SPI1_Init();
   MX_SPI3_Init();
   MX_TIM1_Init();
   MX_TIM4_Init();
@@ -107,8 +106,8 @@ int main(void)
   HAL_UARTEx_ReceiveToIdle_DMA(&huart1, Sguan_PrintfBuff, sizeof(Sguan_PrintfBuff));
   __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
   /* TIM1 只作 PWM（User_InitialInit 里 Start），不要开 Update 中断：
-   * 20kHz 里跑 High_Loop+SPI 会占满 CPU，灯/串口全死 */
-  HAL_TIM_Base_Start_IT(&htim2);  /* 1kHz：High_Loop + Low_Loop */
+   * 20kHz High_Loop 由 ADC 注入完成回调触发。 */
+  HAL_TIM_Base_Start_IT(&htim2);  /* 1kHz：Low_Loop */
   BSP_RGB_Init();
 
 

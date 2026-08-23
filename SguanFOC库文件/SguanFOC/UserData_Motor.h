@@ -26,12 +26,16 @@ static inline void User_MotorSet(void){
     Sguan.motor.Poles = 14;                     // (uint8_t)极对数
     Sguan.motor.VBUS  = 24.0f;                  // (float)额定母线 [V]
 
+
+    //需要实验测试得出，主要是三相线有焊反的可能
     Sguan.motor.Motor_Dir = 1;                  // (int8_t)电机方向1->正向，负1->负向
     Sguan.motor.PWM_Dir = -1;                   // (int8_t)PWM占空比高低对应1->正向，负1->负向
     Sguan.motor.Duty = 4250;                    // (uint16_t)PWM满占空比，对齐 TIM1 ARR
 
     Sguan.motor.Encoder_Dir = -1;               // (int8_t)编码器方向1->正向，负1->负向
 
+
+    //与PCB设计有关
     Sguan.motor.Current_Dir0 = 1;               // (int8_t)相线电流方向1->正向，负1->负向
     Sguan.motor.Current_Dir1 = 1;               // (int8_t)相线电流方向1->正向，负1->负向
     Sguan.motor.Current_Num = 2;                // (uint8_t)0=AB 1=AC 2=BC；本板 IV+IW=BC

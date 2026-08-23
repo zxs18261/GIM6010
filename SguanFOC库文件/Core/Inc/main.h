@@ -63,12 +63,6 @@ void Error_Handler(void);
 #define ADC_NTC2_GPIO_Port GPIOA
 #define CSN_Pin GPIO_PIN_4
 #define CSN_GPIO_Port GPIOA
-#define SCK_Pin GPIO_PIN_5
-#define SCK_GPIO_Port GPIOA
-#define MISO_Pin GPIO_PIN_6
-#define MISO_GPIO_Port GPIOA
-#define MOSI_Pin GPIO_PIN_7
-#define MOSI_GPIO_Port GPIOA
 #define ADC_IW_Pin GPIO_PIN_0
 #define ADC_IW_GPIO_Port GPIOB
 #define ADC_IV_Pin GPIO_PIN_1
