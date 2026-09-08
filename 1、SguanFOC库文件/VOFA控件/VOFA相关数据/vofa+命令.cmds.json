@@ -1,0 +1,29 @@
+{
+  "type": "cmds",
+  "vnumber": 100,
+  "ctx": {
+    "name": "GIM6010安全调试命令",
+    "intro_on": true,
+    "intro": "先用RawData查询；切换JustFloat前，先把VOFA数据引擎改为JustFloat。",
+    "hex_on": false,
+    "loop_on": false,
+    "loop_ms": 100,
+    "loop_count": 1,
+    "cmd_hex": "",
+    "is_group": true,
+    "down": true,
+    "subCmds": [
+      {"name":"帮助 HELP?","intro_on":true,"intro":"只读：显示可用命令","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"48 45 4C 50 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"系统信息 INFO?","intro_on":true,"intro":"只读：状态、电机、限幅和通信统计","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"49 4E 46 4F 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"Flash校准 CAL?","intro_on":true,"intro":"只读：校验并显示校准数据","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"43 41 4C 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"事件回放 LOG?","intro_on":true,"intro":"只读：回放本次上电RAM事件","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"4C 4F 47 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"数据流状态 STREAM?","intro_on":true,"intro":"只读：查看TEXT/JustFloat状态","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"53 54 52 45 41 4D 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"启动JustFloat STREAM=1?","intro_on":true,"intro":"仅status=4可接受，不改变电机控制量","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"53 54 52 45 41 4D 3D 31 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"停止JustFloat STREAM=0?","intro_on":true,"intro":"任意状态可接受，不停止电机","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"53 54 52 45 41 4D 3D 30 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"选择开环 BO=0?","intro_on":true,"intro":"固定值命令，不包含%f模板","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"42 4F 3D 30 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"Uq置零 AO=0?","intro_on":true,"intro":"固定零值，仅清零当前模式AO给定","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"41 4F 3D 30 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"开环速度置零 VO=0?","intro_on":true,"intro":"固定零值，单位为输出轴rad/s","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"56 4F 3D 30 3F","is_group":false,"down":false,"subCmds":[]},
+      {"name":"控制器停机 CO=0?","intro_on":true,"intro":"清零DQ/目标并关闭PWM进入待机","hex_on":false,"loop_on":false,"loop_ms":100,"loop_count":1,"cmd_hex":"43 4F 3D 30 3F","is_group":false,"down":false,"subCmds":[]}
+    ]
+  }
+}

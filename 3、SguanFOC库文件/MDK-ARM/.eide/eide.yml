@@ -1,0 +1,247 @@
+version: "4.1"
+name: GIM6010_V0.0
+type: ARM
+deviceName: null
+packDir: null
+srcDirs: []
+virtualFolder:
+  name: <virtual_root>
+  files: []
+  folders:
+    - name: Application
+      files: []
+      folders:
+        - name: MDK-ARM
+          files:
+            - path: startup_stm32g431xx.s
+          folders: []
+        - name: User
+          files: []
+          folders:
+            - name: Core
+              files:
+                - path: ../Core/Src/main.c
+                - path: ../Core/Src/gpio.c
+                - path: ../Core/Src/adc.c
+                - path: ../Core/Src/dma.c
+                - path: ../Core/Src/fdcan.c
+                - path: ../Core/Src/spi.c
+                - path: ../Core/Src/tim.c
+                - path: ../Core/Src/usart.c
+                - path: ../Core/Src/stm32g4xx_it.c
+                - path: ../Core/Src/stm32g4xx_hal_msp.c
+              folders: []
+    - name: Drivers
+      files: []
+      folders:
+        - name: STM32G4xx_HAL_Driver
+          files:
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_adc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_adc_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_adc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ramfunc.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_gpio.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_exti.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_cortex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_fdcan.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_spi_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_tim_ex.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart.c
+            - path: ../Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_uart_ex.c
+          folders: []
+        - name: CMSIS
+          files:
+            - path: ../Core/Src/system_stm32g4xx.c
+          folders: []
+    - name: BSP
+      files:
+        - path: ../BSP/BSP_ADC.c
+        - path: ../BSP/BSP_ADC.h
+        - path: ../BSP/BSP_MT6816.c
+        - path: ../BSP/BSP_MT6816.h
+        - path: ../BSP/BSP_WS2812B.c
+        - path: ../BSP/BSP_WS2812B.h
+      folders: []
+    - name: SguanFOC
+      files:
+        - path: ../SguanFOC V3.0.1/Sguan_Config.h
+        - path: ../SguanFOC V3.0.1/Sguan_Filter.c
+        - path: ../SguanFOC V3.0.1/Sguan_Filter.h
+        - path: ../SguanFOC V3.0.1/Sguan_IQmath.c
+        - path: ../SguanFOC V3.0.1/Sguan_IQmath.h
+        - path: ../SguanFOC V3.0.1/Sguan_MotorStatus.c
+        - path: ../SguanFOC V3.0.1/Sguan_MotorStatus.h
+        - path: ../SguanFOC V3.0.1/Sguan_Optimize.c
+        - path: ../SguanFOC V3.0.1/Sguan_Optimize.h
+        - path: ../SguanFOC V3.0.1/Sguan_PID.c
+        - path: ../SguanFOC V3.0.1/Sguan_PID.h
+        - path: ../SguanFOC V3.0.1/Sguan_PLL.c
+        - path: ../SguanFOC V3.0.1/Sguan_PLL.h
+        - path: ../SguanFOC V3.0.1/Sguan_printf.c
+        - path: ../SguanFOC V3.0.1/Sguan_printf.h
+        - path: ../SguanFOC V3.0.1/Sguan_STA.c
+        - path: ../SguanFOC V3.0.1/Sguan_STA.h
+        - path: ../SguanFOC V3.0.1/Sguan_SVPWM.c
+        - path: ../SguanFOC V3.0.1/Sguan_SVPWM.h
+        - path: ../SguanFOC V3.0.1/SguanFOC.c
+        - path: ../SguanFOC V3.0.1/SguanFOC.h
+        - path: ../SguanFOC V3.0.1/UserData_Config.h
+        - path: ../SguanFOC V3.0.1/UserData_Function.h
+        - path: ../SguanFOC V3.0.1/UserData_Motor.h
+        - path: ../SguanFOC V3.0.1/UserData_Parameter.h
+        - path: ../SguanFOC V3.0.1/UserData_Status.h
+        - path: ../SguanFOC V3.0.1/UserData_UserControl.h
+      folders: []
+    - name: ::CMSIS
+      files: []
+      folders: []
+dependenceList: []
+outDir: build
+miscInfo:
+  uid: d784e4d07c0e167c033fda3d1d40bd15
+targets:
+  GIM6010_V0.0:
+    cppPreprocessAttrs:
+      defineList:
+        - USE_HAL_DRIVER
+        - STM32G431xx
+      incList:
+        - ../Core/Inc
+        - ../Drivers/STM32G4xx_HAL_Driver/Inc
+        - ../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy
+        - ../Drivers/CMSIS/Device/ST/STM32G4xx/Include
+        - ../Drivers/CMSIS/Include
+        - ../BSP
+        - ../SguanFOC V3.0.1
+        - .cmsis/include
+        - RTE/_GIM6010_V0.0
+      libList: []
+    excludeList: []
+    settings:
+      debugger: cortex-debug
+    toolchain: AC5
+    toolchainConfigMap:
+      AC5:
+        archExtensions: ""
+        cpuType: Cortex-M4
+        floatingPointHardware: single
+        options:
+          version: 4
+          afterBuildTasks: []
+          asm-compiler:
+            defines: []
+          beforeBuildTasks: []
+          c/cpp-compiler:
+            CXX_FLAGS: --diag_suppress=1 --diag_suppress=1295
+            C_FLAGS: --diag_suppress=1 --diag_suppress=1295
+            c99-mode: true
+            one-elf-section-per-function: true
+            optimization: level-3
+            warnings: all-warnings
+          global:
+            output-debug-info: enable
+            use-microLIB: false
+          linker:
+            $outputTaskExcludes:
+              - .bin
+            output-format: elf
+            ro-base: ""
+            rw-base: ""
+            xo-base: ""
+        scatterFilePath: ""
+        storageLayout:
+          RAM:
+            - id: 1
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 3
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: RAM
+            - id: 1
+              isChecked: true
+              mem:
+                size: "0x8000"
+                startAddr: "0x20000000"
+              noInit: false
+              tag: IRAM
+            - id: 2
+              isChecked: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              noInit: false
+              tag: IRAM
+          ROM:
+            - id: 1
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 3
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: ROM
+            - id: 1
+              isChecked: true
+              isStartup: true
+              mem:
+                size: "0x20000"
+                startAddr: "0x8000000"
+              tag: IROM
+            - id: 2
+              isChecked: false
+              isStartup: false
+              mem:
+                size: "0x0"
+                startAddr: "0x0"
+              tag: IROM
+        useCustomScatterFile: false
+    uploadConfigMap:
+      JLink:
+        baseAddr: ""
+        bin: ""
+        cpuInfo:
+          cpuName: "null"
+          vendor: "null"
+        otherCmds: ""
+        proType: 1
+        speed: 8000
+    uploader: JLink

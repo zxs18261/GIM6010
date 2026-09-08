@@ -1,0 +1,17 @@
+---
+description: GIM6010参数、校准、调试证据和Skill经验的持续记录路由
+alwaysApply: true
+---
+
+# FOC文档持续记录
+
+- 开始GIM6010工作前先完整读取`docs/foc/ai-development-handoff.md`，再按其任务路由读取`docs/foc/README.md`中的权威文档。
+- 当前源码/`.ioc`/有效Flash优先于文档；冲突时指出并查证，不静默沿用旧值。
+- 确认或修改参数、单位、参考轴、方向、引脚、频率、限幅或协议时，同步更新`docs/foc/project-profile.md`及对应契约。
+- 新的FOC术语或词义冲突写入`docs/foc/CONTEXT.md`；实现细节不得进入术语表。
+- 完成编译、烧录、带电实验、故障复现、假设否定或回归时，在`docs/foc/debug-records/`或阶段记录中保存条件、数值、原始数据路径和结论，并更新`docs/foc/stage-status.md`。
+- 生成、读取、失效或更换一套装配校准时，更新`docs/foc/calibrations/`中的控制板/电机实例记录。
+- 难以逆转、未来容易误解且存在真实取舍的决策才写`docs/adr/`；普通参数变化不建ADR。
+- 具体GIM6010常量留在仓库文档，不进入通用Skill；跨项目复验的经验先列候选，只有用户明确批准才更新`STM32_FOC_Debugging`。
+- 当前请求明确“只分析/不修改文件”时不写任何文档，只列出候选记录；否则已授权工作完成后同步文档。
+- 最终报告必须说明本轮更新了哪些记录、证据等级、仍缺哪些台架或编译验证。

@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SguanFOC 学习闯关 · 先学后闯</title>
+<style>
+  :root{
+    --bg1:#0b1220; --bg2:#121b30;
+    --card:#1b2740; --card2:#22304f;
+    --line:#33466e;
+    --txt:#e7eefb; --sub:#9fb0d0;
+    --acc:#3ea6ff; --acc2:#6ee7b7;
+    --gold:#ffce54; --red:#ff6b81; --purple:#b79cff;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    color:var(--txt);
+    background:radial-gradient(1200px 600px at 20% -10%,#1c2f55 0%,transparent 60%),linear-gradient(160deg,var(--bg1),var(--bg2));
+    min-height:100%;padding:18px;
+  }
+  .wrap{max-width:900px;margin:0 auto;}
+  h1{font-size:25px;margin:6px 0 2px;}
+  .sub{color:var(--sub);margin:0 0 14px;font-size:14px;}
+  .top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;}
+  .chip{background:var(--card);border:1px solid var(--line);padding:4px 12px;border-radius:20px;font-size:13px;color:var(--sub);}
+
+  /* 顶部导航 */
+  .tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .tab{padding:8px 18px;border-radius:24px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:14px;font-weight:700;color:var(--sub);}
+  .tab.on{background:var(--acc);color:#06203a;border-color:var(--acc);}
+
+  /* 地图 */
+  .map{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:6px;}
+  .node{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:.18s;}
+  .node:not(.locked):hover{transform:translateY(-3px);border-color:var(--acc);box-shadow:0 8px 20px rgba(62,166,255,.18);}
+  .node.locked{opacity:.5;cursor:not-allowed;}
+  .node .tt{font-weight:700;font-size:16px;display:flex;justify-content:space-between;align-items:center;}
+  .node .ds{color:var(--sub);font-size:12.5px;margin:6px 0 10px;line-height:1.5;}
+  .stars{font-size:15px;letter-spacing:2px;color:var(--gold);}
+  .qcount{font-size:11px;color:var(--sub);}
+  .lockIco{color:var(--sub);}
+  .badge{font-size:10px;background:var(--acc);color:#06203a;padding:2px 7px;border-radius:9px;font-weight:700;}
+  .node .acts{display:flex;gap:8px;margin-top:10px;}
+  .mini{flex:1;text-align:center;font-size:12.5px;padding:7px 4px;border-radius:9px;cursor:pointer;font-weight:700;border:1px solid var(--line);background:#16233d;color:var(--sub);}
+  .mini.learn{color:#fff;}
+  .mini.learn:hover{border-color:var(--purple);}
+  .mini.play{color:#fff;}
+  .mini.play:hover{border-color:var(--acc2);}
+
+  .stage{display:none;}
+  .stage.on{display:block;animation:fade .25s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;}}
+
+  /* 讲义 */
+  .lesson{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:18px;padding:20px 22px;}
+  .lesson h2{margin:0 0 4px;font-size:21px;}
+  .lesson .lede{color:var(--sub);font-size:13px;margin:0 0 14px;}
+  .lblk{margin-bottom:14px;}
+  .lh{font-size:16px;font-weight:700;margin:16px 0 6px;color:var(--acc);display:flex;align-items:center;gap:8px;}
+  .lp{font-size:14.5px;line-height:1.75;color:var(--txt);margin:6px 0;}
+  .lp code{background:#0f1930;border:1px solid var(--line);padding:1px 6px;border-radius:6px;font-size:13px;color:var(--acc2);font-family:"Cascadia Code",Consolas,monospace;}
+  .lpre{background:#0c1425;border:1px solid var(--line);border-left:3px solid var(--purple);border-radius:10px;padding:11px 14px;overflow:auto;margin:8px 0;font-family:"Cascadia Code",Consolas,monospace;font-size:12.5px;line-height:1.55;color:#d5e3ff;white-space:pre;}
+  .lpre .cm{color:#5f7194;}
+  .ltip{background:rgba(255,206,84,.08);border:1px solid rgba(255,206,84,.35);color:#ffd978;border-radius:10px;padding:10px 13px;font-size:13px;line-height:1.6;margin:8px 0;}
+  .ltip b{color:var(--gold);}
+  .lesson .navbtns{display:flex;gap:10px;margin-top:18px;justify-content:flex-end;flex-wrap:wrap;}
+  .lessonbar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px;}
+  .lseg{padding:6px 12px;border-radius:20px;font-size:12px;border:1px solid var(--line);color:var(--sub);cursor:pointer;background:#16233d;}
+  .lseg.on{background:var(--purple);color:#160f2e;border-color:var(--purple);font-weight:700;}
+  .reset{color:var(--sub);font-size:12px;cursor:pointer;text-decoration:underline;}
+
+  /* 游戏卡片 */
+  .qcard{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:6px;}
+  .qh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:6px;}
+  .pill{background:rgba(62,166,255,.15);color:var(--acc);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;}
+  .prog{height:8px;background:#0f1930;border-radius:6px;overflow:hidden;margin:12px 0;}
+  .prog>div{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));transition:width .3s;border-radius:6px;}
+  .qtype{font-size:11px;color:var(--purple);background:rgba(183,156,255,.14);display:inline-block;padding:2px 8px;border-radius:8px;margin-bottom:8px;}
+  .qtext{font-size:17px;font-weight:600;line-height:1.5;margin-bottom:14px;}
+  .hint{font-size:12.5px;color:var(--sub);margin-bottom:12px;}
+
+  .opts{display:flex;flex-direction:column;gap:9px;}
+  .opt{background:#16233d;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:.15s;font-size:14.5px;display:flex;gap:10px;align-items:center;}
+  .opt:hover{border-color:var(--acc);}
+  .opt .letter{font-weight:800;color:var(--acc);min-width:18px;}
+  .opt.correct{background:rgba(110,231,183,.12);border-color:var(--acc2);}
+  .opt.wrong{background:rgba(255,107,129,.12);border-color:var(--red);}
+  .opt:disabled{cursor:default;}
+
+  .sortArea{display:flex;gap:14px;flex-wrap:wrap;}
+  .pool,.slot{flex:1;min-width:260px;}
+  .pool h4,.slot h4{margin:0 0 8px;font-size:13px;color:var(--sub);}
+  .poolbox{background:#0f1930;border:1.5px dashed var(--line);border-radius:12px;padding:10px;min-height:100px;display:flex;flex-direction:column;gap:7px;}
+  .slotbox{background:#0f1930;border:1.5px solid var(--acc);border-radius:12px;padding:10px;min-height:100px;display:flex;flex-direction:column;gap:7px;}
+  .sitem{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:13.5px;cursor:grab;display:flex;justify-content:space-between;gap:8px;align-items:center;}
+  .sitem.sel{outline:2px solid var(--purple);border-color:var(--purple);}
+  .sitem .snum{color:var(--acc2);font-weight:800;font-size:12px;min-width:16px;}
+  .rm{color:var(--red);cursor:pointer;font-weight:800;background:none;border:none;font-size:14px;}
+  .sortBtns{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+  .sbtn{background:#16233d;border:1px solid var(--line);border-radius:8px;color:var(--txt);padding:5px 0;cursor:pointer;font-size:13px;}
+  .sbtn:hover{border-color:var(--acc);}
+
+  .feedback{margin-top:16px;padding:13px 15px;border-radius:12px;font-size:14px;line-height:1.6;display:none;}
+  .feedback.good{display:block;background:rgba(110,231,183,.1);border:1px solid var(--acc2);}
+  .feedback.bad{display:block;background:rgba(255,107,129,.1);border:1px solid var(--red);}
+  .feedback .ex{color:var(--sub);font-size:12.5px;margin-top:8px;line-height:1.6;}
+  .btns{display:flex;gap:10px;margin-top:16px;justify-content:space-between;flex-wrap:wrap;}
+  button.btn{background:var(--acc);border:none;color:#06203a;font-weight:800;font-size:15px;padding:12px 22px;border-radius:12px;cursor:pointer;transition:.15s;}
+  button.btn:hover{transform:translateY(-1px);filter:brightness(1.08);}
+  button.btn.ghost{background:#16233d;color:var(--sub);border:1px solid var(--line);font-weight:600;}
+  button.btn.purple{background:var(--purple);color:#160f2e;}
+  button.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+  .combo{font-size:12px;color:var(--gold);font-weight:700;}
+  .scoreBig{font-size:24px;font-weight:800;color:var(--gold);}
+  .result{text-align:center;padding:10px 0;}
+  .result h2{font-size:26px;margin:6px 0;}
+  .rStars{font-size:40px;letter-spacing:6px;color:var(--gold);margin:8px 0;}
+  .rStats{color:var(--sub);margin:12px 0;}
+  .footer{margin-top:22px;text-align:center;color:#5f7194;font-size:12px;}
+
+  /* 薄弱点记录框 */
+  .noteBox{margin-top:20px;border:1px dashed var(--line);border-radius:14px;padding:14px 15px;background:rgba(183,156,255,.04);}
+  .noteBox:focus-within{border-color:var(--purple);}
+  .noteHead{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;font-weight:800;font-size:14px;color:var(--purple);}
+  .noteTip{font-weight:400;font-size:11.5px;color:var(--sub);}
+  .noteTa{width:100%;margin-top:10px;background:#0f1930;border:1px solid var(--line);border-radius:10px;color:var(--txt);padding:10px 12px;font-size:13.5px;line-height:1.6;font-family:inherit;resize:vertical;min-height:52px;}
+  .noteTa:focus{outline:none;border-color:var(--purple);}
+  .noteBtns{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;align-items:center;}
+  .noteBtns .sbtn{width:auto;padding:7px 14px;border-radius:9px;}
+  .noteState{font-size:12px;color:var(--acc2);font-weight:700;}
+  .noteOut{margin-top:12px;display:flex;flex-direction:column;gap:10px;}
+  .cbox{background:#0f1930;border:1px solid var(--line);border-left:3px solid var(--purple);border-radius:10px;padding:11px 14px;}
+  .cbox .cbTitle{font-weight:800;color:var(--purple);font-size:13.5px;margin-bottom:5px;}
+  .cbox .cbBody{font-size:13px;line-height:1.7;color:#cdd9f2;}
+  .cbox .cbBody b{color:var(--acc2);}
+  .cbox .cbMem{font-size:12px;color:var(--gold);margin-top:5px;line-height:1.6;}
+  .excerpt{font-size:12px;color:var(--sub);background:#16233d;border:1px solid var(--line);border-radius:8px;padding:7px 10px;line-height:1.55;}
+  .noteEmpty{font-size:12.5px;color:var(--sub);background:#16233d;border:1px dashed var(--line);border-radius:10px;padding:10px 13px;line-height:1.7;}
+  .noteEmpty code{color:var(--acc2);background:#0f1930;padding:0 5px;border-radius:5px;font-size:12px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>⚙ SguanFOC 先学后闯</h1>
+      <p class="sub">看讲义 → 用闯关检验 · 每章解锁 · 本地存档</p>
+    </div>
+    <div class="chip" id="totalChip">⭐ 0 分 · 0/24 星</div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" id="tabMap" onclick="showPanel('homeStage')">🗺 关卡地图</div>
+    <div class="tab" id="tabLrn" onclick="showPanel('learnIndexStage')">📖 全部讲义</div>
+  </div>
+
+  <!-- 地图 -->
+  <section id="homeStage" class="stage on">
+    <div class="map" id="mapBox"></div>
+    <div style="margin-top:18px;text-align:center"><span class="reset" onclick="resetAll()">重置全部进度</span></div>
+  </section>
+
+  <!-- 讲义列表 -->
+  <section id="learnIndexStage" class="stage">
+    <div class="map" id="learnIndexBox"></div>
+  </section>
+
+  <!-- 讲义正文 -->
+  <section id="lessonStage" class="stage">
+    <div class="lessonbar" id="lessonBar"></div>
+    <div class="lesson" id="lessonBody"></div>
+  </section>
+
+  <!-- 游戏中 -->
+  <section id="gameStage" class="stage">
+    <div class="qh">
+      <span class="pill" id="chName"></span>
+      <span style="font-size:13px;color:var(--sub)">第 <b id="qNow">1</b>/<span id="qTot">1</span> 题</span>
+      <span class="combo" id="comboEl"></span>
+    </div>
+    <div class="prog"><div id="progBar" style="width:0%"></div></div>
+    <div class="qcard" id="qCard"></div>
+    <div class="btns" style="margin-top:8px">
+      <button class="btn ghost" onclick="showPanel('homeStage')">← 退出本章</button>
+      <button class="btn" id="nextBtn" style="display:none" onclick="nextQ()">下一题 →</button>
+    </div>
+  </section>
+
+  <!-- 结算 -->
+  <section id="resultStage" class="stage">
+    <div class="qcard result" id="resultBox"></div>
+    <div style="margin-top:14px;text-align:center">
+      <button class="btn purple" onclick="openLesson(cur.ch.id)">📖 重看本章讲义</button>
+      <button class="btn" onclick="retry()">🔁 再闯一遍</button>
+      <button class="btn ghost" onclick="showPanel('homeStage')">回到地图</button>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ============================================================
+   SguanFOC V3.0.1 讲义 + 题库
+   讲义块: {t:'h'|'p'|'code'|'tip', x:...}
+   题目:   choice单选 / judge判断 / order排序(opt按正确顺序书写)
+   ============================================================ */
+const CHAPTERS=[
+{ id:1,name:"① 总骨架与数据流",icon:"🏗",
+  desc:"全局 Sguan 结构体、4 个公开函数、信号怎么流",
+  lesson:[
+    {t:"h",x:"一段话建立全局观"},
+    {t:"p",x:"这套库做的是<b>PMSM/BLDC 磁场定向控制(FOC)</b>。它把所有状态装进<code>全局结构体 Sguan</code>，所有运算在 <b>两档中断</b>里分层完成，用 <b>status状态机 + mode运行模式</b> 两个字节决定此刻该干什么。看懂这三个“容器”，逻辑就通了一大半。"},
+    {t:"code",x:"SguanFOC_System_STRUCT Sguan;   // 全局唯一电机对象 (SguanFOC.h:370)\nSguan.control.Current_Q           // 电流环Q轴PID\nSguan.safe.VBUS_MAX               // 过压阈值\nSguan.encoder.Real_Speed          // 实际机械角速度\nSguan.current.Real_Id/Iq          // dq轴实际电流"},
+    {t:"h",x:"四个公开入口 = 任务优先级"},
+    {t:"p",x:"函数名即分工，记忆口诀：<b>High算、Low护、Printf收、main发</b>。"},
+    {t:"code",x:"void SguanFOC_High_Loop(void);    // PWM高频中断：采样+闭环+SVPWM(快)\nvoid SguanFOC_Low_Loop(void);     // 1kHz低频中断：保护+状态机(慢)\nvoid SguanFOC_Printf_Loop(...);   // 串口/CAN收包：解析上位机指令\nvoid SguanFOC_main_Loop(void);    // 主循环：发送数据给上位机"},
+    {t:"h",x:"Sguan 里的子系统"},
+    {t:"code",x:"motor(电机硬件) → identify(辨识结果) → current(采样电流)\n→ encoder(编码器角度速度) → foc(目标+缓存) → control(控制器)\n→ lpf(滤波) → safe(保护) → TXdata(收发)"},
+    {t:"tip",x:"<b>记忆锚点：</b>把 <code>Sguan.xxx.yyy</code> 当“文件路径”背；字段注释里 <b>(参数设计)/(数据)/(输入值)</b> 告诉你这项该不该由你去调。"}
+  ],
+  goal:[
+    {type:"choice",q:"这套库把“所有数据”都装进一个全局结构体，变量名是？",
+     opts:["motor","control","Sguan","FOC"],ans:2,ex:"全局变量 `SguanFOC_System_STRUCT Sguan`(SguanFOC.h:179,370)。"},
+    {type:"choice",q:"下面哪个“不是” Sguan 结构体的子系统成员？",
+     opts:["safe(保护阈值)","encoder(编码器)","pwm(占空比寄存器)","lpf(低通滤波)"],ans:2,ex:"没有独立 pwm 子系统；PWM占空比存在 foc.Duty_u/v/w。"},
+    {type:"choice",q:"哪个公开函数在 PWM 高频中断里做 FOC 闭环计算？",
+     opts:["SguanFOC_Low_Loop","SguanFOC_High_Loop","SguanFOC_main_Loop","SguanFOC_Printf_Loop"],ans:1,ex:"High_Loop 算FOC；Low_Loop 1kHz 做保护+状态机。"},
+    {type:"choice",q:"哪个函数负责“根据环境切换电机状态机”？",
+     opts:["Sguan_GeneratePWM_Loop","Status_Switch_Loop","Sguan_Calculate_Loop","Control_Current_SINGLE"],ans:1,ex:"Status_Switch_Loop 判定并切换状态(SguanFOC.c:1117)。"},
+    {type:"judge",q:"判断：PWM 高频中断(High_Loop)和 1kHz 低频中断(Low_Loop)在同一处被调用、做同样的事。",
+     correct:false,ex:"不同。High_Loop 做FOC计算(优先级最高)，Low_Loop 1kHz 做保护+状态机(优先级中)。"},
+    {type:"order",q:"把“从相电流采样到输出占空比”的链路排好(顶部=第1步)：",
+     opts:["采集三相电流 Ia/Ib/Ic","Clarke 变换 → Iα/Iβ","用编码器电角度 Park → Id/Iq","控制器输出 Ud/Uq","反 Park → Uα/Uβ","SVPWM → 三相占空比"],ans:0,ex:"Ia→Iαβ→Id/Iq→控制→反Park→SVPWM。这是 FOC 的主干。"}
+  ]},
+
+{ id:2,name:"② 坐标变换与电流流",icon:"🔄",
+  desc:"Clarke/Park 在哪个函数、为什么必要",
+  lesson:[
+    {t:"h",x:"为什么要坐标变换？"},
+    {t:"p",x:"电机三相电流是<b>旋转的交流量</b>，直接控制很难。FOC 把它投影到与转子<b>同步旋转</b>的 d/q 坐标上，变成<b>直流分量</b>，就能用 PI 稳得像控直流电机一样。这也是 d/q 名字的由来：<b>d=直轴(励磁)，q=交轴(转矩)</b>。"},
+    {t:"h",x:"这段代码在哪个函数？"},
+    {t:"p",x:"采样与<b>正变换</b>集中在 <code>Sguan_Calculate_Loop()</code>(SguanFOC.c:294)；<b>反变换</b>(dq→αβ) 在 <code>SVPWM_Tick()</code> 里。中间量全留在 <code>Sguan.current</code> 供你调试。"},
+    {t:"code",x:"current.Real_Ia/Ib/Ic       三相电流\n   ↓ Clarke\ncurrent.Real_Ialpha/Ibeta   αβ(静止两相)\n   ↓ Park  (用 encoder.Real_Erad 电角度)\ncurrent.Real_Id/Iq          dq(旋转直流) ← 被PID盯住"},
+    {t:"h",x:"关键前提：电角度"},
+    {t:"p",x:"Park 变换必须知道<b>此刻转子电角度</b> Real_Erad。所以编码器读数、极对数换算是整个闭环正确的<b>前提</b>——这也是初始化要先做<b>转子对齐/编码器零位</b>(状态 INITIALIZING)的原因。"},
+    {t:"tip",x:"<b>记：</b>“闭环能不能对，先看 Real_Erad 对不对”。电流、速度、位置环全都依赖它。"}
+  ],
+  goal:[
+    {type:"choice",q:"把三相电流变成“像直流一样好控”的 dq 量，靠什么变换？",
+     opts:["傅里叶变换","Clarke+Park 坐标变换","低通滤波","PID整定"],ans:1,ex:"Clarke(Iabc→Iαβ) + Park(Iαβ→Id/Iq,dq与转子同步旋转)。"},
+    {type:"choice",q:"Park 变换必需知道哪个量才能正确进行？",
+     opts:["母线电压","目标速度","转子电角度 Real_Erad","占空比"],ans:2,ex:"Park 要用电角度把静止系投影到旋转 d/q 系。"},
+    {type:"choice",q:"Id 对应的物理含义是？",
+     opts:["直轴(励磁)电流","交轴(转矩)电流","相电流幅值","零序电流"],ans:0,ex:"d=直轴(励磁)，q=交轴(转矩)；q 电流直接关系力矩。"},
+    {type:"choice",q:"电流采样+正变换(Clarke/Park)主要在哪完成？",
+     opts:["Status_Switch_Loop","Sguan_Calculate_Loop","SguanFOC_Printf_Loop","main_Loop"],ans:1,ex:"Sguan_Calculate_Loop 做编码器/电流采样+变换(SguanFOC.c:294)。"},
+    {type:"judge",q:"判断：Park 变换需要的是静止坐标下的 αβ 电流和当前电角度。",
+     correct:true,ex:"对。Iαβ 来自 Clarke，电角度来自编码器，二者合成 Id/Iq。"},
+    {type:"judge",q:"判断：若编码器电角度不对，电流环会照样稳，只是效率略低。",
+     correct:false,ex:"错。电角度错误会让 dq 投影完全错误，闭环根本不对，可能振荡或失控。"}
+  ]},
+
+{ id:3,name:"③ 四种模式由内而外",icon:"🎯",
+  desc:"mode 四档 = 电流/速度/位置环层层嵌套 + 控制器",
+  lesson:[
+    {t:"h",x:"四档 mode，一层层往外包环"},
+    {t:"p",x:"所有模式的<b>内核都是同一个电流环</b>。理解 0x00 直接给电压，再往外面套，每次只多一个外环。"},
+    {t:"code",x:"0x00 Velocity_OPEN    电压开环: 直接给 foc.Uq_in\n    用途: 测电机参数 / 测运行方向\n0x01 Current_SINGLE   电流单环 = 力矩控制\n0x02 VelCur_DOUBLE    速度环 套 电流环\n0x03 PosVelCur_THREE  位置环 套 速度环 套 电流环"},
+    {t:"h",x:"对应函数(在 SguanFOC.c)"},
+    {t:"code",x:"Control_Velocity_OPEN()       (SguanFOC.c:331)\nControl_Current_SINGLE()      (SguanFOC.c:340)  力矩\nControl_VelCur_DOUBLE()       (SguanFOC.c:377)  速度\nControl_PosVelCur_THREE()     (SguanFOC.c:458)  位置"},
+    {t:"h",x:"控制器：PI 还是 STA？"},
+    {t:"p",x:"一个特色：<b>速度外环默认不是普通 PID，而是一个滑模超螺旋 STA 控制器</b>(Sguan_STA.h)。开启宏 Open_PI_Control 才退回普通 PI。电流环 D/Q 各一个 PID；位置环一个 PID；速度环周期 = 电流环 × Response 带宽倍数。"},
+    {t:"code",x:"PID_STRUCT Current_D, Current_Q;   // 电流环(每次中断都算)\nSTA_STRUCT  Speed;                    // 速度外环(默认)\n// 若 #if Open_PI_Control → PID_STRUCT Velocity;\n// 电流环 T=PMSM_RUN_T; 速度环 T=电流环T*Response;\n// 位置环 T=电流环T*Response*Response  (Sguan_SystemT_Set:1431)"},
+    {t:"tip",x:"<b>口诀：电流环天天算，速度环慢 Response 倍，位置环再慢一倍。</b>"}
+  ],
+  goal:[
+    {type:"choice",q:"mode=0x02 VelCur_DOUBLE_MODE 是什么控制？",
+     opts:["速度开环","电流单环(力矩)","速度-电流双闭环","位置-速度-电流三环"],ans:2,ex:"0x02 速度外环+电流内环；0x01力矩；0x03三环。"},
+    {type:"choice",q:"最内层(最基础)的控制环是？",
+     opts:["位置环","速度环","电流环 Id/Iq","开环"],ans:2,ex:"所有模式共享电流环内核，外环只是换 Target。"},
+    {type:"judge",q:"判断：0x00 速度开环模式下用户直接设置 foc.Uq_in(电压)。",
+     correct:true,ex:"对。开环用电压 Uq_in 测电机参数/方向。"},
+    {type:"choice",q:"速度-电流双环模式下，用户给的期望量(目标)是哪个字段？",
+     opts:["foc.Target_Pos","foc.Target_Speed","foc.Uq_in","foc.Target_Id"],ans:1,ex:"0x02 速度环的 Target 是 foc.Target_Speed。"},
+    {type:"judge",q:"判断：这套库的速度外环默认采用滑模 STA 控制器，而不是普通 PI。",
+     correct:true,ex:"对。默认 STA(Sguan_STA.h)，Open_PI_Control 打开才用普通 PI(SguanFOC.h:45-49)。"},
+    {type:"choice",q:"电流环、速度环、位置环各自的运算周期大致关系是(见 Sguan_SystemT_Set)？",
+     opts:["全相同","速度环=电流环×Response，位置环再×Response","位置环最快","速度环最快"],ans:1,ex:"电流环T=周期；速度环T=×Response；位置环T=×Response²(SguanFOC.c:1441-1446)。"}
+  ]},
+
+{ id:4,name:"④ SVPWM 与 PWM 输出",icon:"📐",
+  desc:"Ud/Uq 怎么变成三相开关信号",
+  lesson:[
+    {t:"h",x:"SVPWM 是 FOC 的最后一级"},
+    {t:"p",x:"控制器算出 d/q 电压 <code>Ud_in/Uq_in</code> 后，需要变成三相桥 6 个开关管的 PWM。SVPWM(空间矢量调制)会让合成磁链更圆、母线电压利用率比 SPWM 高约 <b>15%</b>。"},
+    {t:"h",x:"函数链"},
+    {t:"code",x:"Sguan_GeneratePWM_Loop()      (SguanFOC.c:584)\n  └─ SVPWM_Tick(sine,cosine,Ud/Uq归一化)\n      1. 反 Park: dq→αβ   (用 foc.sine/cosine)\n      2. 扇区判断 + 作用时间计算\n      3. 得到三相占空比 → 写 PWM"},
+    {t:"h",x:"数据落点"},
+    {t:"code",x:"foc.Duty_u/v/w   三相占空比 (0 ~ PWM满占空比Duty)\nfoc.Du/Dv/Dw     归一化占空比 (0~1)\nfoc.Ud_in/Uq_in  d/q电压输入\nfoc.sine/cosine  反变换临时量"},
+    {t:"tip",x:"<b>记：foc 里同时有“计数值 Duty_”和“归一化 D_”两组占空比</b>，因为底层定时器要的是前者的计数。"}
+  ],
+  goal:[
+    {type:"choice",q:"控制器输出的 Ud/Uq 通过哪一步变成三相占空比？",
+     opts:["反 Park + SVPWM","直接限幅","低通滤波","速度前馈"],ans:0,ex:"反Park(dq→αβ)+SVPWM得到Duty_u/v/w。"},
+    {type:"choice",q:"SVPWM 相比普通 SPWM 的一个主要优点是？",
+     opts:["代码更短","母线电压利用率更高(约+15%)","不需要电角度","电流必然更小"],ans:1,ex:"SVPWM合成矢量更圆、母线利用率高约15%。"},
+    {type:"judge",q:"判断：占空比既存在 foc.Duty_u(计数)也存在 foc.Du(0~1归一化)。",
+     correct:true,ex:"对。Duty_u 给底层定时器，Du 是归一化量。"},
+    {type:"choice",q:"反 Park(dq→αβ)用到 foc 里的哪个临时量？",
+     opts:["Target_Iq","sine / cosine","Real_VBUS","Duty_w"],ans:1,ex:"反Park用 foc.sine/cosine 与当前电角度合成 αβ。"},
+    {type:"judge",q:"判断：开环 0x00 模式下也走 SVPWM 输出。",
+     correct:true,ex:"对。模式只决定 Ud/Uq 怎么来，最后都进 GeneratePWM/SVPWM 输出。"}
+  ]},
+
+{ id:5,name:"⑤ 状态机数值表",icon:"🚦",
+  desc:"status 状态号 + 何时算FOC / 何时清驱动",
+  lesson:[
+    {t:"h",x:"权威定义在 Sguan_MotorStatus.h"},
+    {t:"code",x:"0x00-03  待机/未初始化/初始化中/校准\n0x04     IDLE(空闲,已初始化零指令)\n0x05-07  力矩 增/减/保持   ← 电流模式\n0x08-0A  速度 加速/减速/恒速 ← 速度模式\n0x0B-0D  位置 增/减/保持   ← 位置模式\n0x0E-12  过压/欠压/过温/低温/过流\n0x13-15  编码器/传感器/PWM计算错误\n0x16 急停   0x17 DISABLED"},
+    {t:"h",x:"两行代码决定行为"},
+    {t:"p",x:"High_Loop 用两个区间判断：<b>4~13 算 FOC；≥14 清驱动</b>。这是全库最重要的“停/转”逻辑。"},
+    {t:"code",x:"if (Sguan.status > 3 && Sguan.status < 14){   // 运行态\n    Sguan_Calculate_Loop(&Sguan);\n    Sguan_GeneratePWM_Loop(&Sguan);\n}\nif (Sguan.status >= 14){                 // 保护/故障/安全\n    Ud=Uq=0; Target全清; SVPWM清零;\n}"},
+    {t:"h",x:"判定优先级(从高到低)"},
+    {t:"code",x:"1. 急停/失能(DISABLED)   ← 最优先,锁定\n2. STANDBY/初始化信号\n3. 硬件错误(过压/欠压/过温/低温/过流…)\n4. 运行态反馈(是否到 Target)"},
+    {t:"tip",x:"<b>记三句：运行才算、故障就停、安全最高。</b>"}
+  ],
+  goal:[
+    {type:"choice",q:"权威状态号定义在哪个文件？",
+     opts:["SguanFOC.h","Sguan_MotorStatus.h","UserData_Parameter.h","Sguan_Config.h"],ans:1,ex:"状态宏(0x00~0x17)在 Sguan_MotorStatus.h:9-42。"},
+    {type:"choice",q:"High_Loop 只在哪个 status 区间才真正执行 FOC 计算？",
+     opts:["status>0","status>=0","status>3 且 status<14","status>=14"],ans:2,ex:"4~13 运行态才算FOC；≥14 清驱动(SguanFOC.c:1593)。"},
+    {type:"choice",q:"过压保护(OVERVOLTAGE)的状态号是？",
+     opts:["0x0A","0x0E","0x12","0x17"],ans:1,ex:"0x0E过压 0x0F欠压 0x10过温 0x11低温 0x12过流。"},
+    {type:"choice",q:"“力矩保持”(电流模式稳态)对应状态？",
+     opts:["0x05","0x07","0x0A","0x0D"],ans:1,ex:"0x07 TORQUE_CONTROL=力矩保持；0x0A恒速；0x0D位置保持。"},
+    {type:"judge",q:"判断：状态 >=14(如过压、编码器错误)时 High_Loop 会把 Ud/Uq 和目标清零。",
+     correct:true,ex:"对。≥14 一律清零驱动，避免保护期间仍输出PWM(SguanFOC.c:1605)。"},
+    {type:"order",q:"状态机扫描顺序，从最高优先级到最低排好(最高在顶)：",
+     opts:["急停/失能 (EMERGENCY_STOP/DISABLED)","STANDBY/初始化信号","硬件错误(过压/欠压/过温…编码器/传感器)","运行态反馈(力矩/速度/位置是否达Target)"],ans:0,ex:"安全→待机/初始化→硬件错→运行反馈(SguanFOC.c:1117-1195)。"}
+  ]},
+
+{ id:6,name:"⑥ 看门狗保护",icon:"🛡",
+  desc:"safe 阈值 + watchdog 抗抖",
+  lesson:[
+    {t:"h",x:"保护阈值与看门狗都存在 safe"},
+    {t:"code",x:"safe.VBUS_MAX/MIM     过压/欠压阈值\nsafe.Temp_MAX/MIN      过温/低温阈值\nsafe.Dcur_MAX/Qcur_MAX D/Q轴过流阈值\nsafe.Current/Speed/Position_limit   ±限幅区间\nsafe.xxx_watchdog_limit 各保护态的看门狗周期\nsafe.DISABLED_watchdog_limit DISABLED延时"},
+    {t:"h",x:"看门狗 = 抗抖设计"},
+    {t:"p",x:"“瞬时异常不锁死，持续异常才停机。”每个保护态配 watchdog_limit："},
+    {t:"code",x:"// Status_RUN_Loop (SguanFOC.c:1306)\ncount++;\nif (status==OVERVOLTAGE){\n  if (count % VBUS_watchdog_limit == 0)   // 每到limit倍数复查\n     Status_VBUS_OVERVOLTAGE();           // 仍过压→进STANDBY\n  if (count > VBUS_watchdog_limit*10)     // 撑过10倍周期\n     Status_Switch_IDLE();                // 瞬态已过→自动恢复\n}"},
+    {t:"h",x:"运行态怎么算“达到目标”"},
+    {t:"code",x:"// 反馈落在 Target ± limit 内 → 稳态\nReal_Iq ∈ (Target_Iq − Current_limit, +Current_limit)\n        → TORQUE_CONTROL(0x07)\nReal_Speed ∈ Target_Speed ± Speed_limit → CONST_SPEED\nReal_Pos   ∈ Target_Pos   ± Position_limit → POSITION_HOLD"},
+    {t:"tip",x:"<b>记：瞬态允许、持续才停机；能自动恢复。</b>DISABLED 则是软关闭，延时后自动回 STANDBY。"}
+  ],
+  goal:[
+    {type:"choice",q:"保护态看门狗里，count 超过哪个值会自动退出保护态回 IDLE？",
+     opts:["limit","limit*5","limit*10","limit*100"],ans:2,ex:"count>limit*10 认为瞬态已过自动恢复(SguanFOC.c:1327)。"},
+    {type:"choice",q:"“每到 limit 整数倍就复查一次故障条件”的意图是？",
+     opts:["加快响应","抗抖：避免一次瞬时毛刺锁死电机","省CPU","让电机更快"],ans:1,ex:"count%limit==0 复查，仍成立才停机——瞬态允许持续才停。"},
+    {type:"choice",q:"DISABLED(0x17) 最终自动转回哪个状态？",
+     opts:["IDLE(0x04)","STANDBY(0x00)","OVERCURRENT","EMERGENCY_STOP"],ans:1,ex:"DISABLED 超过 DISABLED_watchdog_limit 后回 STANDBY(SguanFOC.c:1317)。"},
+    {type:"choice",q:"过流保护的阈值字段是？",
+     opts:["safe.VBUS_MAX","safe.Dcur_MAX/Qcur_MAX","safe.Temp_MAX","safe.Speed_limit"],ans:1,ex:"D/Q轴过流阈值 Dcur_MAX/Qcur_MAX。"},
+    {type:"judge",q:"判断：一次瞬时过压就会让电机立即停转并锁死。",
+     correct:false,ex:"错。看门狗抗抖：瞬时不锁，持续(limit*10)才恢复/停机。"},
+    {type:"judge",q:"判断：力矩模式判断“达到目标”依据是 Real_Iq 落在 Target_Iq ± Current_limit 内。",
+     correct:true,ex:"对。在区间→TORQUE_CONTROL(0x07)(SguanFOC.c:1200)。"}
+  ]},
+
+{ id:7,name:"⑦ PWM 看门狗与互斥",icon:"🔐",
+  desc:"flag 三标志 + PWM 计算防卡死",
+  lesson:[
+    {t:"h",x:"flag 结构体：三个位一个闸"},
+    {t:"code",x:"Sguan.flag.in_PWM_Calc_ISR    互斥锁: 是否正在算PWM\nSguan.flag.PWM_Calc          本次PWM是否已算\nSguan.flag.PWM_watchdog_limit PWM计算错误上限\nSguan.flag.Angle_Calc         编码器读取标志"},
+    {t:"h",x:"防止中断算不完 / 卡死"},
+    {t:"p",x:"High_Loop 用 in_PWM_Calc_ISR 作互斥锁：若上一轮还没算完就再进，说明计算超时或死循环，计数超过上限就把状态置成 PWM_CALC_FAULT，锁进故障避免持续输出错误占空比。"},
+    {t:"code",x:"// SguanFOC.c:1584\nin_PWM_Calc_ISR = 1;\nif (!PWM_Calc){ PWM_Calc=1; ...算FOC...; PWM_Calc=0; }\nelse { if(++cnt > PWM_watchdog_limit) status=PWM_CALC_FAULT; }\nin_PWM_Calc_ISR = 0;"},
+    {t:"h",x:"Low_Loop 也会看锁"},
+    {t:"p",x:"Low_Loop 开头检查 <code>in_PWM_Calc_ISR</code>：若正在算 PWM 就<b>跳过本轮 1ms 更新</b>，避免和高速中断抢数据。"},
+    {t:"tip",x:"<b>记：in_PWM_Calc_ISR 是“正在算”的信号量，防止高低频中断打架与卡死。</b>"}
+  ],
+  goal:[
+    {type:"choice",q:"防止高低频中断同时访问数据用的标志是？",
+     opts:["PWM_Calc","in_PWM_Calc_ISR","Angle_Calc","status"],ans:1,ex:"in_PWM_Calc_ISR 是互斥锁，标记正在算PWM。"},
+    {type:"choice",q:"若 PWM 计算连续超时(被判定卡死)，High_Loop 会把状态置成？",
+     opts:["OVERCURRENT","PWM_CALC_FAULT(0x15)","IDLE","STANDBY"],ans:1,ex:"计数超 PWM_watchdog_limit → PWM_CALC_FAULT(SguanFOC.c:1662)。"},
+    {type:"judge",q:"判断：Low_Loop 若发现正在执行 PWM 计算，会跳过本轮数据更新。",
+     correct:true,ex:"对。互斥锁防抢占，见 SguanFOC_Low_Loop 开头(SguanFOC.c:1675)。"},
+    {type:"choice",q:"PWM 计算的错误允许上限存在哪个结构体？",
+     opts:["safe","flag","control","motor"],ans:1,ex:"Sguan.flag.PWM_watchdog_limit。"},
+    {type:"judge",q:"判断：PWM_CALC_FAULT 属于硬件保护(≥14)区间，会清驱动。",
+     correct:true,ex:"对。PWM计算错误是0x15，在≥14会归零驱动。"}
+  ]},
+
+{ id:8,name:"⑧ float vs Q31 定点",icon:"🧮",
+  desc:"同一逻辑的浮点/定点双版本 + 标幺",
+  lesson:[
+    {t:"h",x:"为什么有两套代码"},
+    {t:"p",x:"无 FPU 的定点 DSP 上浮点太慢，于是同一套逻辑做了一份 <b>Q31 定点版</b>。二者<b>结构完全同构</b>，只差数值表示，函数/结构体名加 <code>_q31</code> 后缀。"},
+    {t:"code",x:"#if CONFIG_Q31\n  Sguan_Calculate_Loop_q31();  // 用 Q31_t xxx_q31 字段\n  Sguan_GeneratePWM_Loop_q31();\n#else\n  Sguan_Calculate_Loop();      // float 版\n#endif\n// 开关来自宏 CONFIG_Q31/CONFIG_Float (Open_xxx_Calculate)"},
+    {t:"h",x:"Q31 是什么"},
+    {t:"p",x:"Q31 = 值 × 标幺基准量 × 2^31，用整数表达小数。标幺基准 BASE_Time/Current/Voltage/... 在 Sguan_Config.h，源头是 Sguan_IQmath.h 的 Q_xxx。"},
+    {t:"code",x:"// Sguan_Config.h\nBASE_Current = Q_Current   // 电流标幺基准\nBASE_Voltage = Q_Voltage   // 电压标幺基准\nBASE_Speed   = Q_Speed     // 速度标幺基准"},
+    {t:"tip",x:"<b>学习法：先彻底看懂 float 版，Q31 版只记“字段 + 标幺量化”这一处差异。</b>"}
+  ],
+  goal:[
+    {type:"choice",q:"Q31 定点版的同名函数/结构体后缀是？",
+     opts:["_fix","_int","_q31","_fixed"],ans:2,ex:"同名 _q31，与 float 版成对。"},
+    {type:"choice",q:"选 float 还是 Q31 由什么决定？",
+     opts:["编译宏 CONFIG_Q31/CONFIG_Float","全局变量","状态号","看门狗"],ans:0,ex:"由宏决定，代码 #if CONFIG_Q31 分支。"},
+    {type:"choice",q:"Q31 定点数 ≈ 值 × 标幺基准量 × 2^31。标幺基准 BASE_* 定义在哪？",
+     opts:["Sguan_IQmath.h 与 Sguan_Config.h","SguanFOC.h","Sguan_PID.h","Sguan_MotorStatus.h"],ans:0,ex:"BASE_* 在 Sguan_Config.h:17-25，源头 Q_xxx 在 Sguan_IQmath.h。"},
+    {type:"judge",q:"判断：float 版与 Q31 版的控制算法结构完全相同，只是数值表示不同。",
+     correct:true,ex:"对。逻辑同构，字段类型(Q31_t)不同，纯float的用 #if CONFIG_Float 包。"},
+    {type:"judge",q:"判断：Q31 定点是为有 FPU 的高端 MCU 提升浮点精度而设计的。",
+     correct:false,ex:"错。Q31 定点主要为了<b>无 FPU 的定点 DSP/MCU</b> 也能跑得动 FOC，不用浮点。"}
+  ]}
+];
+
+/* ============================================================
+   引擎
+   ============================================================ */
+const KEY="sguanFOC_save_v2";
+let save=load();
+function load(){ try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return{};} }
+function persist(){ try{localStorage.setItem(KEY,JSON.stringify(save));}catch(e){} }
+function resetAll(){ if(confirm("确定清空全部进度和分数？")){ save={}; persist(); renderMap(); renderLearnIndex(); showPanel('homeStage'); } }
+function starsFor(c){ return (save[c]&&save[c].stars)||0; }
+function unlocked(c){ if(c===1)return true; return starsFor(c-1)>0; }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){let j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+let cur=null; // {ch,qs,qi,score,combo,bestCombo,right,total,answered}
+
+function showPanel(id){
+  document.querySelectorAll(".stage").forEach(s=>s.classList.remove("on"));
+  document.getElementById(id).classList.add("on");
+  document.getElementById("tabMap").classList.toggle("on",id==="homeStage");
+  document.getElementById("tabLrn").classList.toggle("on",id==="learnIndexStage");
+  if(id==="learnIndexStage") renderLearnIndex();
+}
+
+/* ---------- 地图 ---------- */
+function renderMap(){
+  const box=document.getElementById("mapBox"); box.innerHTML="";
+  let tot=0, totStar=0;
+  CHAPTERS.forEach(ch=>{
+    const u=unlocked(ch.id), st=starsFor(ch.id);
+    tot+= (save[ch.id]&&save[ch.id].score)||0; totStar+=st;
+    const d=document.createElement("div");
+    d.className="node"+(u?"":" locked");
+    d.innerHTML=`<div class="tt">${ch.icon} ${ch.name} ${u?"":"<span class='lockIco'>🔒</span>"}</div>
+      <div class="stars">${st?("★".repeat(st)+"☆".repeat(3-st)):""}</div>
+      <div class="ds">${ch.desc}</div>
+      <div class="qcount">${ch.goal.length} 题</div>
+      <div class="acts">
+        <div class="mini learn" onclick="openLesson(${ch.id})">📖 讲义</div>
+        <div class="mini play">${u?(st?"🎮 再战":"🎮 闯关"):"🔒 需通关上一章"}</div>
+      </div>`;
+    if(u) d.querySelector(".mini.play").onclick=()=>startCh(ch.id);
+    box.appendChild(d);
+  });
+  document.getElementById("totalChip").textContent=`⭐ ${tot} 分 · ${totStar}/${CHAPTERS.length*3} 星`;
+}
+
+/* ---------- 讲义列表 ---------- */
+function renderLearnIndex(){
+  const box=document.getElementById("learnIndexBox"); box.innerHTML="";
+  CHAPTERS.forEach(ch=>{
+    const d=document.createElement("div"); d.className="node";
+    d.innerHTML=`<div class="tt">${ch.icon} ${ch.name}</div>
+      <div class="ds">${ch.desc}</div>
+      <div class="qcount">${ch.lesson.length} 个知识点</div>`;
+    d.onclick=()=>openLesson(ch.id);
+    box.appendChild(d);
+  });
+}
+
+/* ---------- 讲义正文 ---------- */
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function openLesson(id){
+  const ch=CHAPTERS.find(x=>x.id===id); cur={ch,qi:0};
+  // 顶部章节切换条
+  const bar=document.getElementById("lessonBar"); bar.innerHTML="";
+  CHAPTERS.forEach(c=>{
+    const s=document.createElement("div"); s.className="lseg"+(c.id===id?" on":"");
+    s.textContent=`${c.icon}${c.id}`; s.onclick=()=>openLesson(c.id);
+    bar.appendChild(s);
+  });
+  const body=document.getElementById("lessonBody");
+  body.innerHTML=`<h2>${ch.icon} ${ch.name}</h2><p class="lede">${ch.desc}</p>`;
+  ch.lesson.forEach(b=>{
+    const d=document.createElement("div"); d.className="lblk";
+    if(b.t==="h"){ d.className="lh"; d.innerHTML=esc(b.x); }
+    else if(b.t==="p"){ d.className="lp"; d.innerHTML=b.x; }
+    else if(b.t==="code"){ d.innerHTML=`<div class="lpre">${esc(b.x)}</div>`; }
+    else if(b.t==="tip"){ d.className="ltip"; d.innerHTML=b.x; }
+    body.appendChild(d);
+  });
+  const nav=document.createElement("div"); nav.className="navbtns";
+  nav.innerHTML=`<button class="btn purple" onclick="startCh(${ch.id})">✅ 我看懂了，开始闯关</button>
+    <button class="btn ghost" onclick="showPanel('homeStage')">返回</button>`;
+  body.appendChild(nav);
+  showPanel("lessonStage");
+}
+
+/* ---------- 闯关 ---------- */
+function startCh(id){
+  const ch=CHAPTERS.find(x=>x.id===id);
+  const qs=shuffle(ch.goal.map((q,i)=>{ q._oi=i; return q; }));
+  cur={ch,qs,qi:0,score:0,combo:0,bestCombo:0,right:0,total:qs.length,answered:false};
+  document.getElementById("chName").textContent=`${ch.icon} ${ch.name}`;
+  showPanel("gameStage");
+  renderQ();
+}
+function renderQ(){
+  const g=cur; const ch=g.ch;
+  document.getElementById("qNow").textContent=g.qi+1;
+  document.getElementById("qTot").textContent=g.total;
+  document.getElementById("progBar").style.width=(g.qi/g.total*100)+"%";
+  document.getElementById("comboEl").textContent=g.combo>=2?("🔥 x"+g.combo+" 连击"):"";
+  document.getElementById("nextBtn").style.display="none";
+  const card=document.getElementById("qCard"); card.innerHTML="";
+  const q=g.qs[g.qi]; g.answered=false; g.noteOutShown=false;
+  const qname={choice:"✅ 单选",judge:"⚖ 判断",order:"🧩 排序谜题"};
+  const host=document.createElement("div");   // 题目作答区
+  fbZone=document.createElement("div");       // 对错反馈区
+  card.appendChild(host); card.appendChild(fbZone);
+  host.innerHTML=`<div class="qtype">${qname[q.type]}</div><div class="qtext">${esc(q.q)}</div>`;
+  if(q.type==="choice") buildChoice(host,q);
+  else if(q.type==="judge") buildJudge(host,q);
+  else buildOrder(host,q);
+  addNoteBox(card,q,ch.id);
+}
+function mkOpt(opts){
+  const wrap=document.createElement("div"); wrap.className="opts";
+  const letters=["A","B","C","D","E","F"];
+  opts.forEach((o,i)=>{
+    const b=document.createElement("div"); b.className="opt"; b.dataset.correct=o.correct?1:0;
+    b.innerHTML=`<span class="letter">${letters[i]}</span><span>${esc(o.t)}</span>`;
+    b.onclick=()=>answer(b,o.correct);
+    wrap.appendChild(b);
+  });
+  return wrap;
+}
+function buildChoice(card,q){
+  const opts=shuffle(q.opts.map((o,i)=>({t:o,correct:i===q.ans})));
+  card.appendChild(mkOpt(opts));
+}
+function buildJudge(card,q){
+  const opts=[{t:"✔ 说法正确",correct:q.correct===true},{t:"✘ 说法错误",correct:q.correct!==true}];
+  card.appendChild(mkOpt(opts));
+}
+function answer(el,correct){
+  const g=cur; if(g.answered)return; g.answered=true;
+  const q=g.qs[g.qi];
+  const wrap=el.parentElement;
+  [...wrap.children].forEach(x=>x.disabled=true);
+  el.classList.add(correct?"correct":"wrong");
+  if(!correct) [...wrap.children].forEach(x=>{ if(x.dataset.correct==1) x.classList.add("correct"); });
+  showFeedback(correct,q); addResult(correct);
+}
+
+/* 排序谜题 */
+function buildOrder(card,q){
+  const st=cur.orderState={slot:[],rem:shuffle(q.opts),sel:-1};
+  const area=document.createElement("div"); area.className="sortArea";
+  area.innerHTML=`<div class="pool"><h4>备选（点击加入下方序列）</h4><div class="poolbox" id="poolBox"></div></div>
+    <div class="slot"><h4>你的顺序（顶部=第1步）<span style="float:right" id="slotCount">0/${q.opts.length}</span></h4>
+      <div class="slotbox" id="slotBox"></div>
+      <div class="sortBtns">
+        <button class="sbtn" id="upB">↑ 上移选中</button>
+        <button class="sbtn" id="downB">↓ 下移选中</button>
+        <button class="sbtn" id="clearB">✕ 清空</button>
+      </div></div>`;
+  card.appendChild(area);
+  const poolB=area.querySelector("#poolBox"), slotB=area.querySelector("#slotBox"), slotCount=area.querySelector("#slotCount");
+  const setSel=v=>{ st.sel=v; };
+  function renderSlots(){
+    slotB.innerHTML="";
+    st.slot.forEach((s,i)=>{
+      const it=document.createElement("div"); it.className="sitem"+(i===st.sel?" sel":"");
+      it.innerHTML=`<span class="snum">${i+1}</span><span style="flex:1">${esc(s)}</span><button class="rm">✕</button>`;
+      it.onclick=()=>{ setSel(st.sel===i?-1:i); renderSlots(); };
+      it.querySelector(".rm").onclick=(e)=>{ e.stopPropagation(); const idx=i; const v=st.slot[idx]; st.slot.splice(idx,1); st.rem.push(v); if(st.sel===idx)setSel(-1); else if(st.sel>idx)setSel(st.sel-1); renderSlots(); };
+      slotB.appendChild(it);
+    });
+    slotCount.textContent=`${st.slot.length}/${q.opts.length}`;
+    poolB.innerHTML="";
+    st.rem.forEach((p,i)=>{
+      const it=document.createElement("div"); it.className="sitem poolitem";
+      it.innerHTML=`<span style="flex:1">${esc(p)}</span><span class="snum">＋</span>`;
+      it.onclick=()=>{ const v=st.rem[i]; st.slot.push(v); st.rem.splice(i,1); setSel(-1); renderSlots(); };
+      poolB.appendChild(it);
+    });
+    const chk=card.querySelector("#chkB");
+    const full=st.slot.length===q.opts.length;
+    if(chk) chk.style.display=(!cur.answered&&full)?"inline-block":"none";
+    if(!chk&&!cur.answered&&full){
+      const c=document.createElement("button"); c.id="chkB"; c.className="btn"; c.style.marginTop="14px";
+      c.textContent="✅ 检查顺序"; c.onclick=()=>checkAnswer(q); area.after(c);
+    }
+  }
+  function move(d){
+    if(st.sel<0){ slotCount.textContent=`${st.slot.length}/${q.opts.length}（先点序列中一项再移）`; return; }
+    const ni=st.sel+d; if(ni<0||ni>=st.slot.length)return;
+    const tmp=st.slot[st.sel]; st.slot[st.sel]=st.slot[ni]; st.slot[ni]=tmp; setSel(ni); renderSlots();
+  }
+  renderSlots();
+  area.querySelector("#upB").onclick=()=>move(-1);
+  area.querySelector("#downB").onclick=()=>move(1);
+  area.querySelector("#clearB").onclick=()=>{ st.rem=st.rem.concat(st.slot); st.slot=[]; setSel(-1); renderSlots(); };
+}
+function checkAnswer(q){
+  const g=cur; if(g.answered)return; g.answered=true;
+  const order=g.orderState.slot, n=q.opts.length;
+  const match=order.length===n && order.every((x,i)=>x===q.opts[i]);
+  showFeedback(match,q,order); addResult(match);
+}
+
+/* 内联 markdown：把 `code` 变成高亮(先转义防注入) */
+function md(s){
+  return esc(s).replace(/`([^`]+)`/g,"<code>$1</code>");
+}
+function showFeedback(correct,q,order){
+  const fb=document.createElement("div");
+  fb.className="feedback "+(correct?"good":"bad");
+  const head= correct? "🎉 正确！" : (order? "❌ 顺序有误":"❌ 不对哦");
+  fb.innerHTML=`<b>${head}</b><div class="ex">💡 ${md(q.ex)}</div>`;
+  if(order&&!correct){
+    const corr=q.opts.map((x,i)=>`${i+1}. ${x}`).join("  →  ");
+    fb.insertAdjacentHTML("beforeend",`<div class="ex">✔ 正确顺序：${corr}</div>`);
+  }
+  fbZone.appendChild(fb);
+  document.getElementById("nextBtn").style.display="inline-block";
+}
+function addResult(correct){
+  const g=cur;
+  if(correct){ g.right++; g.combo++; g.bestCombo=Math.max(g.bestCombo,g.combo); g.score+=100+(g.combo-1)*10; }
+  else g.combo=0;
+  document.getElementById("comboEl").textContent=g.combo>=2?("🔥 x"+g.combo+" 连击"):"";
+}
+function nextQ(){
+  const g=cur; g.answered=false; g.orderState=null; g.qi++;
+  if(g.qi>=g.total){ finish(); return; }
+  renderQ();
+}
+function finish(){
+  const g=cur;
+  const ratio=g.right/g.total;
+  const stars= ratio>=0.85?3 : ratio>=0.7?2 : ratio>=0.5?1 : 0;
+  const old=save[g.ch.id]||{}; const pass=stars>0;
+  const newStars=Math.max(stars,old.stars||0);
+  save[g.ch.id]={stars:pass?newStars:0, score:(old.score||0)+g.score, best:Math.max(old.best||0,g.bestCombo)};
+  persist();
+  const r=document.getElementById("resultBox");
+  r.innerHTML=`<h2>${pass?"🏆 章节完成！":g.ch.icon+" 差一点…"}</h2>
+    <div class="rStars">${"★".repeat(newStars)}${"☆".repeat(3-newStars)}</div>
+    <div class="scoreBig">${g.score} 分</div>
+    <div class="rStats">答对 ${g.right}/${g.total} · 最高连击 x${g.bestCombo}${pass?"":"（≥50% 正确即可过关）"}</div>`;
+  showPanel("resultStage"); renderMap();
+}
+function retry(){ if(cur&&cur.ch) startCh(cur.ch.id); }
+
+/* ============================================================
+   薄弱点记录 + 按内容解释
+   ============================================================ */
+let fbZone=null;
+const NKEY="sguanFOC_notes_v1";
+let NOTES=loadNotes();
+function loadNotes(){ try{return JSON.parse(localStorage.getItem(NKEY))||{};}catch(e){return{};} }
+function persistNotes(){ try{localStorage.setItem(NKEY,JSON.stringify(NOTES));}catch(e){} }
+function qidOf(chId,q){ return chId+"_"+ (q._oi!==undefined? q._oi : (cur.ch.id===chId?cur.qs.indexOf(q):-1)); }
+
+/* 每题一个记录框 */
+function addNoteBox(card,q,chId){
+  const qid=qidOf(chId,q);
+  const saved=(NOTES[qid]||"").trim();
+  const box=document.createElement("div"); box.className="noteBox";
+  box.innerHTML=`<div class="noteHead">📝 我的薄弱点 / 卡点记录
+      <span class="noteTip">写下这题你不懂/答错的原因，我会按你写的内容解释</span></div>
+    <textarea class="noteTa" placeholder="例：不懂为什么电角度错整个环就不对 / Q31 和 float 有啥区别 / watchdog 为什么不会误停…">${esc(saved)}</textarea>
+    <div class="noteBtns">
+      <button class="sbtn" id="noteGo">🔍 保存并按我的记录解释</button>
+      <button class="sbtn" id="noteClear">✕ 清空</button>
+      <span class="noteState"></span>
+    </div>
+    <div class="noteOut"></div>`;
+  card.appendChild(box);
+  const ta=box.querySelector("textarea");
+  const out=box.querySelector(".noteOut");
+  const st=box.querySelector(".noteState");
+  box.querySelector("#noteGo").onclick=()=>{
+    const txt=ta.value.trim();
+    NOTES[qid]=txt; persistNotes();
+    if(txt) st.textContent="✓ 已保存（下面是对你记录的解释）";
+    renderNoteExplain(out,q,chId,txt,true);
+  };
+  box.querySelector("#noteClear").onclick=()=>{ ta.value=""; NOTES[qid]=""; persistNotes(); out.innerHTML=""; st.textContent=""; };
+  if(saved){ st.textContent="有上次的记录，可点上方按钮重新解释"; renderNoteExplain(out,q,chId,saved,false); }
+}
+
+/* ---------- 概念库：记录里出现哪个词，就解释哪个 ---------- */
+const CONCEPTS=[
+  {k:["电角度","Real_Erad","转子角度","编码器角度","机械角度"],
+   name:"编码器读数 vs 电角度(Real_Erad)",
+   d:"编码器给的是<em>机械</em>角度；<b>电角度 = 机械角度 × 极对数</b>(换算到电气 360°)。Park 变换必须用<b>电角度</b>把静止 αβ 电流投影到旋转 dq 系，角度错一点点，Id/Iq 就全错，电流环跟着失控——所以“电角度错=整个环都不对”。"},
+  {k:["clarke","克拉克","αβ","alpha beta","Ialpha"],
+   name:"Clarke 变换(三相→两相静止)",
+   d:"把 Ia/Ib/Ic 三相投影成两相静止坐标 Iα/Iβ(Ialpha/Ibeta)，相当于省掉一相冗余，是 FOC 第一步；结果存在 <code>Sguan.current.Real_Ialpha/Ibeta</code>。它不需要转子位置。"},
+  {k:["park","帕克","dq","D轴","Q轴","Id","Iq","直轴","交轴"],
+   name:"Park 变换(静止→旋转 dq) 与 Id/Iq",
+   d:"用<b>当前电角度</b>把 Iα/Iβ 转到与转子同步旋转的 d/q 轴上：<b>d=直轴(励磁)，q=交轴(转矩)</b>。转成 dq 后是“直流”，PID 才稳得住。反变换(SVPWM 前)同样用电角度做回来。"},
+  {k:["svpwm","空间矢量","占空比","Duty","扇区"],
+   name:"SVPWM / 占空比",
+   d:"最后一级：把 dq 电压反变换后按扇区算出三相占空比 <code>Duty_u/v/w</code>(计数)与 <code>Du/Dv/Dw</code>(0~1)。SVPWM 让磁链更圆、母线利用率比 SPWM 高约15%。"},
+  {k:["看门狗","watchdog","wd","抗抖","毛刺","误停"],
+   name:"看门狗(watchdog) 抗抖保护",
+   d:"保护态不是“一次越限就停”：到 <code>limit</code> 的整数倍才<b>复查</b>一次，仍越限才进 STANDBY；若连续撑过 <code>limit×10</code> 都没再触发，说明是瞬态，自动回 IDLE。<b>目的：瞬时毛刺不锁死电机</b>。"},
+  {k:["过压","欠压","过温","低温","过流","OVERVOLTAGE","UNDERVOLTAGE"],
+   name:"硬件保护态(0x0E~0x12)",
+   d:"0x0E过压 0x0F欠压 0x10过温 0x11低温 0x12过流，阈值都存在 <code>Sguan.safe</code>。进入这些状态后 status≥14，High_Loop 会<b>把驱动清零</b>，不会继续输出 PWM。"},
+  {k:["互斥","in_PWM_Calc_ISR","信号量","打断","抢"],
+   name:"互斥锁 in_PWM_Calc_ISR",
+   d:"PWM 高频中断计算时会置 <code>in_PWM_Calc_ISR=1</code>；1kHz 的 Low_Loop 进来发现它在算就<b>跳过本轮</b>，避免两个中断同时读写同一份数据。“互斥”=同一时刻只允许一个人碰数据。"},
+  {k:["pwm calc","PWM_CALC","卡死","超时","算不完","PWM_watchdog"],
+   name:"PWM 看门狗 / PWM_CALC_FAULT(0x15)",
+   d:"若上一轮 PWM 还没算完新中断又来了(说明计算超时/卡死)，计数超 <code>PWM_watchdog_limit</code> 就把 status 置成 PWM_CALC_FAULT，属于 ≥14，驱动归零，防止持续输出错误占空比。"},
+  {k:["q31","定点","标幺","BASE_","2^31","定点数","IQmath"],
+   name:"Q31 定点 + 标幺",
+   d:"Q31 = 值 × 标幺基准量 × 2^31，用整数表示小数，给<b>没有 FPU 的定点 DSP/MCU</b> 跑 FOC。基准量 BASE_Current/Voltage/… 在 Sguan_Config.h。选哪套由宏 CONFIG_Q31 决定。"},
+  {k:["float","浮点","浮点运算","精度"],
+   name:"float 浮点版",
+   d:"普通带 FPU 的 MCU 用 float 版(默认)。结构字段是 float；Q31 版字段是 Q31_t xxx_q31，二者算法完全同构。"},
+  {k:["sta","滑模","超螺旋","k1","k2","boundary","抗饱和"],
+   name:"STA 滑模控制器(速度外环)",
+   d:"速度外环默认不是 PI，而是超螺旋滑模 STA(Sguan_STA.h)：k1 非线性增益、k2 积分增益、boundary 边界层。想用传统 PI 就打开宏 Open_PI_Control，字段换成 Velocity(PID)。"},
+  {k:["pid","比例积分","响应","带宽","Response"],
+   name:"PID / Response 响应带宽",
+   d:"电流环每个控制周期都算(PID)；外环周期 = 电流环周期 × Response(速度环) / ×Response²(位置环)。<code>Response</code> 越大外环算得越快、越“跟手”，但太大会不稳。"},
+  {k:["电流环","力矩","Target_Iq","Current_SINGLE"],
+   name:"电流环(力矩) mode 0x01",
+   d:"目标是 <code>foc.Target_Iq/Id</code>，PID 盯住实际 Id/Iq 输出 Ud/Uq。Iq 直接产生力矩；Id 通常给 0(表贴电机)或负值(弱磁)。Real_Iq 落在 Target_Iq±Current_limit 内就算“力矩保持”(0x07)。"},
+  {k:["速度环","Target_Speed","双环","VelCur"],
+   name:"速度环 mode 0x02",
+   d:"目标 <code>foc.Target_Speed</code>。速度误差经 STA/PI 得到 Target_Iq，再交给电流环。Real_Speed 在 Target_Speed±Speed_limit 内→恒速(0x0A)。"},
+  {k:["位置环","Target_Pos","三环","位置控制","PosVel"],
+   name:"位置环 mode 0x03",
+   d:"目标 <code>foc.Target_Pos</code>(多圈角度)。位置误差→速度目标→电流目标，三环嵌套。Real_Pos 在 Target_Pos±Position_limit 内→位置保持(0x0D)。"},
+  {k:["开环","Uq_in","电压","测参数","方向"],
+   name:"速度开环 mode 0x00",
+   d:"不给闭环，直接设 <code>foc.Uq_in</code>(Q轴电压)。常用于<b>测电机参数、测旋转方向</b>；不走反馈，力矩不可控。"},
+  {k:["状态机","status","切换","锁定","优先级"],
+   name:"状态机 status 与优先级",
+   d:"整个库的“要不要干活”由 status 决定：4~13 运行态才算 FOC；≥14(保护/故障/安全)驱动归零。判定顺序：急停/失能→待机/初始化→硬件错误→运行反馈，高优先级先 return。"},
+  {k:["standby","待机","急停","EMERGENCY","disabled","失能","IDLE","空闲"],
+   name:"安全/待机相关状态",
+   d:"0x00 STANDBY 待机、0x04 IDLE 空闲(已初始化零指令)、0x16 急停(立即关 PWM 并锁定)、0x17 DISABLED(软关，超 DISABLED_watchdog_limit 后自动回 STANDBY)。"},
+  {k:["母线","VBUS","电压采样","Real_VBUS"],
+   name:"母线电压 VBUS",
+   d:"<code>foc.Real_VBUS</code> 由 User_VBUS_DataGet 每 1ms 刷新(-9999 表示没接)。过压/欠压阈值在 safe.VBUS_MAX/MIM；开环 SVPWM 会除以 VBUS 归一化。"},
+  {k:["低通","滤波","LPF","lpf"],
+   name:"低通滤波 LPF",
+   d:"D/Q 轴电流、速度反馈都各有一个低通(LPF_STRUCT)：滤采样噪声，让反馈平滑。T=采样周期，系数决定截止频率。"},
+  {k:["pll","锁相环"],
+   name:"PLL 锁相环(测速)",
+   d:"<code>encoder.pll</code> 用锁相环从位置脉冲提取速度(比直接差分稳)，Real_Speed 机械角速度由它给出。"}
+];
+
+/* 保存后：按记录内容生成解释 */
+function renderNoteExplain(out,q,chId,txt,doScroll){
+  if(!txt){ showNoteEmpty(out); return; }
+  const lower=txt.toLowerCase();
+  const hits=[];
+  CONCEPTS.forEach(c=>{
+    const ok=c.k.some(k=>lower.includes(k.toLowerCase()));
+    if(ok) hits.push(c);
+  });
+  const html=[];
+  if(hits.length===0){
+    html.push(`<div class="noteEmpty"><b>我还没能完全对上你写的内容 😅</b><br>
+      试着把卡点写得更具体，例如：<br>
+      · <code>电角度怎么算？错一点会怎样？</code><br>
+      · <code>watchdog 的 limit 和 limit×10 各干什么？</code><br>
+      · <code>Q31 标幺怎么来的？为什么省时间？</code><br>
+      · <code>四种 mode 到底差在哪？</code><br>
+      下面先附上本题解析，帮你定位。</div>`);
+  }else{
+    html.push(`<div style="font-size:12px;color:var(--acc2);font-weight:700;margin-bottom:2px">🧠 根据你的记录，解释这些概念</div>`);
+    hits.forEach(c=>{
+      html.push(`<div class="cbox"><div class="cbTitle">▸ ${c.name}</div><div class="cbBody">${c.d}</div></div>`);
+    });
+  }
+  // 附带本题解析(定位用)
+  html.push(`<div class="excerpt"><b>💡 本题要点：</b>${md(q.ex)}</div>`);
+  // 相关讲义摘录
+  const ch=CHAPTERS.find(x=>x.id===chId);
+  const kwLower=txt.toLowerCase();
+  const rel=[];
+  (ch.lesson||[]).forEach(b=>{
+    const btxt=(b.x||"").toLowerCase();
+    const hit=CONCEPTS.some(c=>c.k.some(k=>btxt.includes(k.toLowerCase())&&kwLower.includes(k.toLowerCase())));
+    if(hit && b.t!=="h" && rel.length<2) rel.push({t:b.t,x:b.x});
+  });
+  if(rel.length){
+    html.push(`<div style="font-size:12px;color:var(--gold);font-weight:700;margin-top:2px">📚 本章讲义摘录（和你记录相关）</div>`);
+    rel.forEach(r=>{
+      html.push(`<div class="excerpt">${r.t==="code"?"<code>代码：</code>":"<code>讲义：</code>"}${esc(r.x).slice(0,220)}${r.x.length>220?"…":""}</div>`);
+    });
+  }
+  out.innerHTML=html.join("");
+  if(hits.length && doScroll) out.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function showNoteEmpty(out){
+  out.innerHTML=`<div class="noteEmpty">先在框里写下你的卡点，再点“保存并按我的记录解释”～
+  写得越具体（概念名/现象/你的疑问），解释越贴合。</div>`;
+}
+
+/* init */
+renderMap(); renderLearnIndex();
+</script>
+</body>
+</html>

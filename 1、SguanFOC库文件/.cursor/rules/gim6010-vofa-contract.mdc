@@ -1,0 +1,23 @@
+---
+description: GIM6010的VOFA串口协议、命令语义和36个固定通道
+alwaysApply: true
+---
+
+# VOFA通信契约
+
+- USART1固定为921600-8N1；协议为JustFloat：36个小端float后接帧尾`00 00 80 7F`，共148 byte；目标发送率500 Hz，约占80.3%物理线速。
+- 下行是ASCII `AO/BO/CO/VO=<十进制浮点数>?`。`%f`、NaN、Inf、指数、缺数字、超长或残缺命令必须丢弃且不得改变任何控制量。
+- `BO`模式：0开环FOC、1电流环、2速度-电流双环、3位置-速度-电流三环；`AO`单位依次为V、A、rad/s、rad，`VO`仅在开环设置输出轴rad/s。
+- `CO=0`清零DQ/目标并关闭PWM进入待机；启动类命令必须继续服从状态机、母线和校准安全门控。
+- Ch0：状态机编号；Ch1：输出轴实测速度[rad/s]；Ch2：输出轴目标速度[rad/s]。
+- Ch3：Id[A]；Ch4：Iq[A]；Ch5：U相PWM比较值[count]；Ch6：实际成功启动DMA的数据帧率[Hz]。
+- Ch7：Uq给定[V]；Ch8：Ia[A]；Ch9：PLL相对机械位置[rad]；Ch10：机械零位偏置[rad]。
+- Ch11：控制模式；Ch12：母线电压[V]；Ch13：SVPWM使用的电角度[rad]；Ch14：MT6816单圈机械角[rad]。
+- Ch15：Ch13[deg]；Ch16：Ch14[deg]；Ch17：最近原始AO，单位随模式变化。
+- Ch18：开环实际积分用输出轴速度[rad/s]；Ch19：输出轴瞬时峰值转矩12.39 N·m；Ch20：输出轴软件速度上限30.787608 rad/s。
+- Ch21：校准结果码；Ch22：本次实际对齐Ud[V]；Ch23：相序检查结果；Ch24：Flash校准有效标志。
+- Ch25：母线ADC有效标志；Ch26：复位后未滤波母线最小值[V]。
+- Ch27～Ch33：Encoder_Dir、Motor_Dir、PWM_Dir、Current_Dir0、Current_Dir1、Current_Num和极对数。
+- Ch34：TIM1硬件MOE状态；Ch35：当前Ud[V]。
+- Ch6使用20 kHz计数差计算，首个成功帧为0；它不是VOFA界面绘图刷新率，也不是控制环频率。
+- 未经用户明确批准不得改协议、重排或复用现有通道。新增通道只能从末尾追加，并同步修改`CH_COUNT`、带宽计算、源码注释、VOFA指南和上位机配置。
