@@ -27,19 +27,35 @@ static inline uint8_t User_InitialInit(void){
 
     /* 重复 CO=1 时注入链可能仍在等待 TIM1 触发；先用 HAL 合法停止注入组，
      * 再停止可能由 BSP_ADC LL 路径遗留的规则组。任一步失败都保持 MOE=0/CEN=0。 */
+    g_foc_init_stage = 1U;   /* 【临时诊断】进入 */
     if (HAL_ADCEx_InjectedStop_IT(&hadc1) != HAL_OK) {
-        return 0U;
+        return 0U;           /* 阶段=1：停止注入失败 */
     }
     if (HAL_ADC_Stop(&hadc1) != HAL_OK) {
-        return 0U;
+        g_foc_init_stage = 2U;
+        return 0U;           /* 阶段=2：HAL_ADC_Stop 失败 */
     }
-    if ((LL_ADC_REG_IsConversionOngoing(hadc1.Instance) != 0UL) ||
-        (LL_ADC_INJ_IsConversionOngoing(hadc1.Instance) != 0UL) ||
-        (LL_ADC_IsEnabled(hadc1.Instance) != 0UL)) {
-        return 0U;
+    /* 待命态 BSP_ADC_Poll 的 LL 单通道读会把 ADC enable 且从不 disable；
+     * 校准前 ADC 必须处于 disabled（否则 Calibration_Start 会失败）。
+     * 因此这里不把"仍使能"当作不可恢复故障，而是先显式关闭并等待 ADEN 清零，
+     * 确认真实清掉后才继续。只有确实无法关闭才锁故障（DOC §16 修复⑨）。 */
+    g_foc_init_stage = 3U;   /* 清理使能态（若 ADC 本就 disabled，此步直接通过） */
+    if (LL_ADC_IsEnabled(hadc1.Instance) != 0UL) {
+        LL_ADC_Disable(hadc1.Instance);
+        {
+            uint32_t guard = 200000UL;   /* 等 ADEN 清零；上限保守，防死等 */
+            while (LL_ADC_IsEnabled(hadc1.Instance) != 0UL) {
+                if (--guard == 0UL) break;
+            }
+        }
+        if (LL_ADC_IsEnabled(hadc1.Instance) != 0UL) {
+            g_foc_init_stage = 4U;
+            return 0U;       /* 阶段=4：仍无法关闭 ADC */
+        }
     }
     if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK) {
-        return 0U;
+        g_foc_init_stage = 5U;
+        return 0U;           /* 阶段=5：校准启动失败 */
     }
 
     /* TIM1 触发源、DMA 映射与 NVIC 优先级均由 CubeMX 统一管理。 */
@@ -64,9 +80,11 @@ static inline uint8_t User_InitialInit(void){
     /* 先确认注入组已成功布防，再启动 TIM1 触发；启动失败时计数器和功率桥
      * 都保持关闭，由调用方锁存 SENSOR_ERROR。 */
     if (HAL_ADCEx_InjectedStart_IT(&hadc1) != HAL_OK) {
-        return 0U;
+        g_foc_init_stage = 6U;
+        return 0U;           /* 阶段=6：注入布防启动失败 */
     }
     __HAL_TIM_ENABLE(&htim1);
+    g_foc_init_stage = 0U;   /* 【临时诊断】初始化成功，清除阶段码 */
     return 1U;
 }
 

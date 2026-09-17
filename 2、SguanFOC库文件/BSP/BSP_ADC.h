@@ -42,6 +42,9 @@ extern "C" {
  * 接近满量程必须报告为明确过量程高值，使 50V 软件阈值也能 fail-closed。 */
 #define BSP_ADC_VBUS_SAT_RAW     (4000U)    /* 约35.45V，给满量程/器差/噪声留失效关闭裕量 */
 #define BSP_ADC_VBUS_OVERRANGE_V (1000.0f)
+/* 电流采样 ADC 贴近满量程时，换算后的 DQ 电流已不再可信，必须先于软件阈值失效。 */
+#define BSP_ADC_CURRENT_SAT_RAW_MIN (16U)
+#define BSP_ADC_CURRENT_SAT_RAW_MAX (4080U)
 
 /* ---------- 板载 NTC（PA2，MOS 管旁，3950/10k/0603，上拉 R3=10k） ---------- */
 #define BSP_ADC_NTC_BOARD_BETA     (3950.0f)   /* B 常数 */

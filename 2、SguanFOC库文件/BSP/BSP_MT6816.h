@@ -32,7 +32,7 @@ extern "C" {
 #define BSP_MT6816_POLE_PAIRS       (14U)       /*!< GIM6010 24V 极对数 */
 #define BSP_MT6816_GEAR_RATIO       (8.0f)      /*!< 减速比 8:1 */
 #define BSP_MT6816_CACHE_HZ         (1000U)     /*!< 当前主循环阻塞采样名义频率 [Hz] */
-#define BSP_MT6816_STALE_TIMEOUT_US (2000U)     /*!< 缓存超过此年龄视为失效 */
+#define BSP_MT6816_STALE_TIMEOUT_US (2000U)     /*!< 缓存超过此年龄视为失效；需实测主循环采样抖动后再调整 */
 
 /* ============================ 状态 ======================================== */
 typedef enum

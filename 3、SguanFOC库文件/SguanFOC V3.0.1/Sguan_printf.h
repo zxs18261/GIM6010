@@ -8,7 +8,7 @@
  * @description: 自定义数据发送的个数(默认为8)
  * @return {*}
  */
-#define CH_COUNT 19 // UART或者CAN发送的数据个数 (19通道@1kHz; 5备用=编译宏, 启用需升波特率或降频)
+#define CH_COUNT 20 // UART或者CAN发送的数据个数
 
 typedef struct{
     float fdata[CH_COUNT];

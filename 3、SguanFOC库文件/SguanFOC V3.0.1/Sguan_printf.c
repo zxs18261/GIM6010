@@ -21,7 +21,7 @@ uint8_t Sguan_PrintfBuff[200];
 
 /* ================= 重定向设计 BEGIN ================= */
 // 支持printf函数，而无需选择MicroLIB
-#if 1
+#if 0 /* AC5-only semihosting declarations; AC6 provides stdio definitions. */
 #pragma import(__use_no_semihosting)
 //标准库需要的支持函数
 struct __FILE{ 
@@ -106,6 +106,10 @@ void Printf_Init(PRINTF_STRUCT *str){
 
 // [发送]发送数据Tick函数，发送周期可自定
 void Printf_Loop(PRINTF_STRUCT *str){
+    static uint32_t last_tick = 0;
+    uint32_t now = HAL_GetTick();
+    if ((uint32_t)(now - last_tick) < 1U) return;
+    last_tick = now;
     // 发送JustFloat数据
     User_CorrespondSet((uint8_t *)str,sizeof(PRINTF_STRUCT));
 }
@@ -124,4 +128,3 @@ void Printf_Adjust(void){
     }
     memset(Sguan_PrintfBuff, 0, sizeof(Sguan_PrintfBuff));
 }
-

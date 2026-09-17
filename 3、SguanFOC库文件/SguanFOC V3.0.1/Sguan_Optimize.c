@@ -11,52 +11,31 @@
  */
 #include "Sguan_Optimize.h"
 
-// 经典最大转矩电流比 id 计算公式
-// [修复] 标准MTPA闭式解(令 Δ=Ld-Lq): id* = [sqrt(λ²+8Δ²·iq²) - λ] / (4Δ)
-//   - iq=0 时 id* -> 0（无转矩则无d轴电流）
-//   - 凸极 Lq>Ld (Δ<0) 时给出负的 id（弱磁/磁阻利用）
-//   原代码 -(λ+sqrt)/(4Δ) 符号/量级错误；且未防 Ld==Lq 除零(表贴机)
+// 经典最大转矩电流id计算公式
 void MTPA_Loop(float *Target_id,float flux,float Ld,float Lq,float iq){
-    float delta = Ld - Lq;
-    if (Value_fabsf(delta) < 1e-9f){   // 表贴电机 Ld≈Lq：MTPA不适用，id保持0
-        *Target_id = 0.0f;
-        return;
-    }
-    *Target_id = (Value_sqrtf(flux*flux + 8.0f*delta*delta*iq*iq) - flux) /
-                 (4.0f*delta);
+    *Target_id = - (flux + Value_sqrtf(flux*flux + 
+                8*(Ld - Lq)*(Ld - Lq)*iq*iq))/
+                ((Ld - Lq)*4);
 }
 
 void MTPA_Loop_q31(Q31_t *Target_id, Q31_t flux, Q31_t Ld, Q31_t Lq, Q31_t iq){
-    Q31_t delta;
+    Q31_t Ld_minus_Lq;
     Q31_t temp;
     Q31_t sqrt_input;
-    int64_t wide;
-
-    delta = IQmath_Q31_sub(Ld, Lq);
-    if (delta == 0){            // 表贴电机保护：Ld==Lq 不适用 MTPA
-        *Target_id = 0;
-        return;
-    }
-
-    /* temp = 8*delta^2*iq^2 （Q31域平方后再乘整数8，乘整数必须左移、不能再用Q31乘法） */
-    temp = IQmath_Q31_mul(delta, delta);        // delta^2
-    temp = IQmath_Q31_mul(temp, iq);            // delta^2*iq
-    temp = IQmath_Q31_mul(temp, iq);            // delta^2*iq^2
-    wide = (int64_t)temp << 3;                  // *8 (带饱和)
-    if (wide > Q31_MAX) wide = Q31_MAX;
-    else if (wide < Q31_MIN) wide = Q31_MIN;
-    temp = (Q31_t)wide;
-
+    
+    Ld_minus_Lq = IQmath_Q31_sub(Ld, Lq);
+    
+    temp = IQmath_Q31_mul(Ld_minus_Lq, Ld_minus_Lq);
+    temp = IQmath_Q31_mul(temp, iq);
+    temp = IQmath_Q31_mul(temp, iq);
+    temp = IQmath_Q31_mul(temp, 8);
+    
     sqrt_input = IQmath_Q31_add(IQmath_Q31_mul(flux, flux), temp);
-
-    /* id* = (sqrt(...) - flux) / (4*delta)   [修复：符号/量级同float版] */
     temp = Value_sqrt_q31(sqrt_input);
-    temp = IQmath_Q31_sub(temp, flux);
+    
+    temp = IQmath_Q31_add(flux, temp);
+    temp = -temp;
+    Ld_minus_Lq = IQmath_Q31_mul(Ld_minus_Lq, 4);
 
-    wide = (int64_t)delta << 2;                 // 4*delta (带饱和)
-    if (wide > Q31_MAX) wide = Q31_MAX;
-    else if (wide < Q31_MIN) wide = Q31_MIN;
-    delta = (Q31_t)wide;
-
-    *Target_id = IQmath_Q31_div(temp, delta);
+    *Target_id = IQmath_Q31_div(temp, Ld_minus_Lq);
 }

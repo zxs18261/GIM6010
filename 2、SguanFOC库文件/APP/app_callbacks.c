@@ -31,6 +31,10 @@ volatile uint32_t g_uart_rx_drop_cnt = 0U;
 volatile uint32_t g_uart_rx_error_cnt = 0U;
 volatile uint32_t g_uart_rx_restart_fail_cnt = 0U;
 
+/* 【临时诊断，定位后移除】User_InitialInit 失败阶段码（见 UserData_Function.h）：
+ * 0=未失败/成功；每步 return 0 前写入 1~6。VOFA Ch15 观察。 */
+volatile uint8_t g_foc_init_stage = 0U;
+
 #define APP_UART_RX_QUEUE_DEPTH  (4U)
 static uint8_t s_uart_rx_queue[APP_UART_RX_QUEUE_DEPTH][sizeof(Sguan_PrintfBuff)];
 static uint16_t s_uart_rx_length[APP_UART_RX_QUEUE_DEPTH];
@@ -149,6 +153,16 @@ void HAL_ADCEx_InjectedConvCpltCallback(ADC_HandleTypeDef *hadc)
         ADC_InjectedValues[1] = HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_2);
         ADC_InjectedValues[2] = HAL_ADCEx_InjectedGetValue(hadc, ADC_INJECTED_RANK_3);
         BSP_ADC_FeedVBUSFast(ADC_InjectedValues[2]);
+        if ((Sguan.status >= MOTOR_STATUS_CALIBRATING) &&
+            (Sguan.status < MOTOR_STATUS_OVERVOLTAGE) &&
+            ((ADC_InjectedValues[0] <= BSP_ADC_CURRENT_SAT_RAW_MIN) ||
+             (ADC_InjectedValues[0] >= BSP_ADC_CURRENT_SAT_RAW_MAX) ||
+             (ADC_InjectedValues[1] <= BSP_ADC_CURRENT_SAT_RAW_MIN) ||
+             (ADC_InjectedValues[1] >= BSP_ADC_CURRENT_SAT_RAW_MAX))) {
+            /* ADC 饱和时电流大小和方向均不可信，禁止继续运行。 */
+            Sguan.status = MOTOR_STATUS_OVERCURRENT;
+            User_PwmOutputDisable();
+        }
         /* 1kHz 低环只看最新电压，短脉冲可能在下一样本恢复后被覆盖；因此在
          * 20kHz 采样现场直接关桥并锁故障。状态锁存后正常样本不会自动清除。 */
         if (ADC_InjectedValues[2] >= BSP_ADC_VBUS_SAT_RAW) {

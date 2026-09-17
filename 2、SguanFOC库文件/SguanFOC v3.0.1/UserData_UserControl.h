@@ -161,7 +161,9 @@ static inline void User_AO_Adjust(float AO){
     switch (Sguan.mode){
     case Velocity_OPEN_MODE:
         {
-            float umax = USER_OPENLOOP_UQ_MAX_RATIO * Sguan.motor.VBUS;
+            float vbus = Sguan.foc.Real_VBUS;
+            float umax = (Value_isnan(vbus) || Value_isinf(vbus) || (vbus <= 0.0f))
+                       ? 0.0f : (USER_OPENLOOP_UQ_MAX_RATIO * vbus);
             if (AO > umax) {
                 AO = umax;
             } else if (AO < -umax) {
@@ -411,7 +413,10 @@ static inline void User_UserTX(void){
     Sguan.TXdata.fdata[13] = elec_rad;                  /* Ch13：SVPWM 实际电角度 θe [rad]。 */
     Sguan.TXdata.fdata[14] = mech_rad;                  /* Ch14：MT6816 单圈机械角 [rad]，0~2π。 */
     /* Ch15~23 为电流环诊断页。fault_frozen=1 时保留首次故障前的快照，不再显示已清零的实时量。 */
-    Sguan.TXdata.fdata[15] = fault_frozen ? (float)g_foc_fault_snapshot.raw_iv : (float)ADC_InjectedValues[0];
+    /* Ch15：非故障时显示 V 相原始 ADC；若初始化失败诊断量非零则改显阶段码。 */
+    Sguan.TXdata.fdata[15] = (g_foc_init_stage != 0U)
+        ? (float)g_foc_init_stage
+        : (fault_frozen ? (float)g_foc_fault_snapshot.raw_iv : (float)ADC_InjectedValues[0]);
     Sguan.TXdata.fdata[16] = fault_frozen ? (float)g_foc_fault_snapshot.raw_iw : (float)ADC_InjectedValues[1];
     Sguan.TXdata.fdata[17] = fault_frozen ? g_foc_fault_snapshot.offset0 : (float)Sguan.current.Current_offset0;
     Sguan.TXdata.fdata[18] = fault_frozen ? g_foc_fault_snapshot.offset1 : (float)Sguan.current.Current_offset1;

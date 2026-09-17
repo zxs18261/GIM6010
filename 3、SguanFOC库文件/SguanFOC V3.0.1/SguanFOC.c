@@ -1188,9 +1188,7 @@ static void Status_Switch_Loop(SguanFOC_System_STRUCT *sguan){
         MOTOR_STATUS_SENSOR_ERROR_Signal()){
         sguan->status = MOTOR_STATUS_SENSOR_ERROR;
     }
-    // [修复] 原边界 status<21 漏掉 PWM_CALC_FAULT(21)，会使锁定态被下方运行态判定覆盖"假恢复"；
-    // 硬件保护态/错误态 14~21 一律最高优先级早退(22 EMERGENCY_STOP / 23 DISABLED 已在函数开头处理)
-    if (sguan->status >= 14 && sguan->status < 22){
+    if (sguan->status >= 14 && sguan->status < 21){
         return; // 硬件相关错误状态优先级高于运行状态, 直接返回不执行后续状态判断
     }
 
@@ -1304,15 +1302,8 @@ static void Status_Switch_Loop(SguanFOC_System_STRUCT *sguan){
 
 // Status定时器中断调用的状态机运行函数
 static void Status_RUN_Loop(SguanFOC_System_STRUCT *sguan){
-    // [修复] 状态切换时清零看门狗计时：原实现count全局累计且只在STANDBY/IDLE清零，
-    // 导致运行数十秒后进入DISABLED/故障态时 count 早已超限(→约1ms瞬态)或
-    // 立即触发 count>limit*10 自动恢复(保护不锁存)。
+    // 1.状态机失能DISABLED安全状态处理
     static uint32_t count = 0;
-    static uint8_t last_status = 0xFF;
-    if (sguan->status != last_status){
-        count = 0;                  // 进入新状态，看门狗从0重新计时
-        last_status = sguan->status;
-    }
     count++;
     if (sguan->status == MOTOR_STATUS_DISABLED){
         if (count > sguan->safe.DISABLED_watchdog_limit){
@@ -1583,14 +1574,12 @@ static void Sguan_Start_Tick(void){
  */
 void SguanFOC_High_Loop(void){
     static uint8_t PWM_watchdog_counter = 0;
-    static uint8_t protect_latch = 0;   // [修复] 保护态"进入沿"锁存：从非保护态跳入保护态才清零一次
     Sguan.flag.in_PWM_Calc_ISR = 1;
     if (!Sguan.flag.PWM_Calc){
         Sguan.flag.PWM_Calc = 1;
 
-        // [修复] 仅“运行态”(4~13)执行FOC计算；14~18为硬件保护态(过压/欠压/过温/低温/过流)
-        // 保护态与故障态(>=14)一律停止驱动(见下方归零分支)，避免保护期间仍输出PWM
-        if (Sguan.status > 3 && Sguan.status < 14){
+        // 如果在初始化完成，进入函数
+        if (Sguan.status > 3 && Sguan.status < 19){       
             #if !CONFIG_Q31     
             // 计算编码器和电流
             Sguan_Calculate_Loop(&Sguan);
@@ -1602,11 +1591,9 @@ void SguanFOC_High_Loop(void){
             Sguan_GeneratePWM_Loop_q31(&Sguan);
             #endif // CONFIG_Q31
         }
-        if (Sguan.status >= 14){    // [修复] >=14(保护态14~18与故障/安全态19~23)一律清零输出
-            // [修复] 用"进入沿"代替原先的静态状态比较：原实现若从故障恢复(回到4~13)后又
-            // 进入同一故障状态，因status值相同会漏掉清零，电机将带着旧驱动继续输出
-            if (!protect_latch){
-                protect_latch = 1;
+        if (Sguan.status >= 19){
+            static uint8_t status = 0xFF;
+            if (status != Sguan.status){
                 #if !CONFIG_Q31
                 // 电压给定归零
                 Sguan.foc.Ud_in = 0.0f;
@@ -1625,6 +1612,7 @@ void SguanFOC_High_Loop(void){
                     Sguan.foc.cosine,
                     Sguan.foc.Ud_in/Sguan.motor.VBUS,
                     Sguan.foc.Uq_in/Sguan.motor.VBUS);
+                status = Sguan.status;
                 #else // CONFIG_Q31
                 Sguan.foc.Ud_in_q31 = 0;
                 Sguan.foc.Uq_in_q31 = 0;
@@ -1642,11 +1630,9 @@ void SguanFOC_High_Loop(void){
                     Sguan.foc.cosine_q31,
                     IQmath_Q31_div(Sguan.foc.Ud_in_q31,Sguan.motor.VBUS_q31),
                     IQmath_Q31_div(Sguan.foc.Uq_in_q31,Sguan.motor.VBUS_q31));
+                status = Sguan.status;
                 #endif // CONFIG_Q31
             }
-        }
-        else{
-            protect_latch = 0;  // 离开保护态后复位，允许下次进入故障时再次清零
         }
 
         #if Printf_Debug

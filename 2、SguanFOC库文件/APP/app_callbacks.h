@@ -55,6 +55,9 @@ extern volatile uint32_t g_uart_rx_drop_cnt;
 extern volatile uint32_t g_uart_rx_error_cnt;
 extern volatile uint32_t g_uart_rx_restart_fail_cnt;
 
+/* 【临时诊断，定位后移除】User_InitialInit 失败阶段码（见 UserData_Function.h） */
+extern volatile uint8_t g_foc_init_stage;
+
 uint8_t APP_UartRxStart(void);
 uint8_t APP_UartStopPending(void);
 void APP_UartCommandPoll(void);

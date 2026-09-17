@@ -137,6 +137,7 @@ static void Printf_Normal_Loop(SguanFOC_System_STRUCT *sguan);
  */
 static void Sguan_SystemT_Set(SguanFOC_System_STRUCT *sguan);
 static void Sguan_Positioning_Set(SguanFOC_System_STRUCT *sguan,float Ud,float Uq);
+static float Sguan_GetEffectiveVbus(const SguanFOC_System_STRUCT *sguan);
 /**
  * @description: 12.Sguan...Init各种控制系统的初始化
  * @param {SguanFOC_System_STRUCT} *sguan
@@ -677,6 +678,7 @@ static void SVPWM_Tick(SguanFOC_System_STRUCT *sguan,
 
 // Sguan_GeneratePWM_Loop计算PID并执行电机控制
 static void Sguan_GeneratePWM_Loop(SguanFOC_System_STRUCT *sguan){
+    float vbus;
     // 用户实时控制的参数传入
     User_UserControl();
     // PID运算PWM大小并执行
@@ -697,11 +699,22 @@ static void Sguan_GeneratePWM_Loop(SguanFOC_System_STRUCT *sguan){
         Limit_DqVoltageForBringup(sguan);
     }
 
+    /* SVPWM 的归一化分母必须是有效母线电压；异常时禁止把 NaN/Inf
+     * 转换成占空比。低频保护会记录欠压，但高频路径必须立即失效安全。 */
+    vbus = Sguan_GetEffectiveVbus(sguan);
+    if (Value_isnan(vbus) || Value_isinf(vbus) || (vbus <= 0.0f)){
+        sguan->foc.Ud_in = 0.0f;
+        sguan->foc.Uq_in = 0.0f;
+        sguan->status = MOTOR_STATUS_SENSOR_ERROR;
+        User_PwmOutputDisable();
+        return;
+    }
+
     SVPWM_Tick(sguan,
         sguan->foc.sine,        // sin正弦值给定
         sguan->foc.cosine,      // cos余弦值给定
-        sguan->foc.Ud_in/sguan->motor.VBUS,
-        sguan->foc.Uq_in/sguan->motor.VBUS);
+        sguan->foc.Ud_in/vbus,
+        sguan->foc.Uq_in/vbus);
 }
 
 // =============================== float 版本代码(代码实现) =============================
@@ -1170,6 +1183,15 @@ static void Sguan_GeneratePWM_Loop_q31(SguanFOC_System_STRUCT *sguan){
         return;
     }
 
+    /* Q31 母线电压为零时禁止除法；高频路径直接关闭功率桥。 */
+    if (sguan->motor.VBUS_q31 <= 0){
+        sguan->foc.Ud_in_q31 = 0;
+        sguan->foc.Uq_in_q31 = 0;
+        sguan->status = MOTOR_STATUS_SENSOR_ERROR;
+        User_PwmOutputDisable();
+        return;
+    }
+
     SVPWM_Tick_q31(sguan,
         sguan->foc.sine_q31,
         sguan->foc.cosine_q31,
@@ -1517,10 +1539,16 @@ static void Sguan_SystemT_Set(SguanFOC_System_STRUCT *sguan){
 // Sguan...Set电机零点对齐(机械角度对齐)
 static void Sguan_Positioning_Set(SguanFOC_System_STRUCT *sguan,float Ud,float Uq){
     #if !CONFIG_Q31
+    float vbus = Sguan_GetEffectiveVbus(sguan);
+    if (Value_isnan(vbus) || Value_isinf(vbus) || (vbus <= 0.0f)) {
+        User_PwmOutputDisable();
+        sguan->status = MOTOR_STATUS_SENSOR_ERROR;
+        return;
+    }
     // 电机零位Ud,Uq设计
     SVPWM_Tick(sguan,0.0f,1.0f,
-        Ud/sguan->motor.VBUS,
-        Uq/sguan->motor.VBUS);
+        Ud/vbus,
+        Uq/vbus);
     #else // CONFIG_Q31
     Q31_t d = IQmath_Q31_from_float(Ud,BASE_Voltage);
     Q31_t q = IQmath_Q31_from_float(Uq,BASE_Voltage);
@@ -1528,6 +1556,12 @@ static void Sguan_Positioning_Set(SguanFOC_System_STRUCT *sguan,float Ud,float U
         IQmath_Q31_div(d,sguan->motor.VBUS_q31),
         IQmath_Q31_div(q,sguan->motor.VBUS_q31));
     #endif // CONFIG_Q31
+}
+
+/* 所有带电路径都使用最近一次有效采样母线；额定 motor.VBUS 只用于配置和显示，
+ * 不能作为运行时归一化回退，否则采样掉线时会继续输出错误占空比。 */
+static float Sguan_GetEffectiveVbus(const SguanFOC_System_STRUCT *sguan){
+    return sguan->foc.Real_VBUS;
 }
 
 // Sguan...Init巴特沃斯低通滤波器的初始化
@@ -1705,7 +1739,7 @@ static void Sguan_Start_Tick(void){
         }
         //电机回零操作
         User_PwmOutputEnable();
-        Sguan_Positioning_Set(&Sguan,0.3f*Sguan.motor.VBUS,0.0f);
+        Sguan_Positioning_Set(&Sguan,0.3f*Sguan_GetEffectiveVbus(&Sguan),0.0f);
         User_Delay(1200);
         if (Sguan.status != MOTOR_STATUS_CALIBRATING){
             User_PwmOutputDisable();
@@ -1784,18 +1818,24 @@ void SguanFOC_High_Loop(void){
             Sguan.status = MOTOR_STATUS_ENCODER_ERROR;
         }
 
-        // 如果在初始化完成，进入函数
-        if (Sguan.status > MOTOR_STATUS_IDLE &&
+        /* 已完成校准后，即使处于 IDLE/高阻待机也持续刷新编码器 PLL 和电流
+         * 快照；否则手转或惯性滑行会让下一次启动沿用过期角度和多圈位置。
+         * 只有运行态才执行控制器和 SVPWM，IDLE 不会打开功率桥。 */
+        if (Sguan.status >= MOTOR_STATUS_IDLE &&
             Sguan.status < MOTOR_STATUS_OVERVOLTAGE){
             #if !CONFIG_Q31     
             // 计算编码器和电流
             Sguan_Calculate_Loop(&Sguan);
-            // 运算PID并执行SVPWM(如果计算超时，会更新错误状态并停用此线程)
-            Sguan_GeneratePWM_Loop(&Sguan);
+            if (Sguan.status > MOTOR_STATUS_IDLE) {
+                // 运算PID并执行SVPWM(如果计算超时，会更新错误状态并停用此线程)
+                Sguan_GeneratePWM_Loop(&Sguan);
+            }
             #else // CONFIG_Q31
             IQmath_Calculate_High_Tick_q31(&Sguan);
             Sguan_Calculate_Loop_q31(&Sguan);
-            Sguan_GeneratePWM_Loop_q31(&Sguan);
+            if (Sguan.status > MOTOR_STATUS_IDLE) {
+                Sguan_GeneratePWM_Loop_q31(&Sguan);
+            }
             #endif // CONFIG_Q31
         }
         if (Sguan.status >= MOTOR_STATUS_OVERVOLTAGE){

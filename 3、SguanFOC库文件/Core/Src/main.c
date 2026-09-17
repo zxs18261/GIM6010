@@ -25,12 +25,11 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "SguanFOC.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "SguanFOC.h"
-#include "app_protocol.h"
-#include "BSP_ADC.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -104,34 +103,18 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  APP_Init();   /* LED/标定加载/CAN/串口接收 初始化 */
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t tick_low  = 0;   // 1ms 低速任务节拍
-  uint32_t tick_main = 0;   // main_Loop 节拍(内含串口打印,需限速)
-
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    // ---- 应用层任务(命令解析/CAN轮询/标定检测/状态灯/心跳) ----
-    APP_Task();
-
-    // ---- SguanFOC 主循环任务(最低优先级): 状态机初始化/校准 + VOFA 数据打印(节流) ----
-    if (HAL_GetTick() - tick_main >= 5){
-        tick_main = HAL_GetTick();
-        SguanFOC_main_Loop();
-    }
-
-    // ---- 1ms 低速任务(状态机切换/母线电压/温度/保护) ----
-    if (HAL_GetTick() - tick_low >= 1){
-        tick_low = HAL_GetTick();
-        BSP_ADC_UpdateSlow();   /* 温度/VBUS 常规组DMA读取 */
-        SguanFOC_Low_Loop();
-    }
+    SguanFOC_main_Loop();
+  }
   /* USER CODE END 3 */
 }
 
@@ -181,21 +164,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-/**
-  * @brief 定时器周期回调：SguanFOC 三循环的硬件挂载点
-  * @note  stm32g4xx_it.c 只调 HAL_TIM_IRQHandler，这里强定义弱回调，
-  *        由 CubeMX 工程自动调用（htim1/htim2/htim4 均路由到此）。
-  *        高优先级 FOC 计算必须放在 TIM1 更新中断里执行。
-  */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-    if (htim->Instance == TIM1){
-        SguanFOC_High_Loop();   // ~20kHz 电流环/PWM计算(需先使能TIM1更新中断与PWM)
-    }
-    else if (htim->Instance == TIM2){
-        SguanFOC_Low_Loop();    // 1kHz 状态机/VBUS/温度/保护(可选,当前主循环已轮询)
-    }
-    /* TIM4 用于 WS2812/其它, 如需在此处理可扩展 */
-}
 
 /* USER CODE END 4 */
 

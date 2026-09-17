@@ -68,40 +68,49 @@ virtualFolder:
       files:
         - path: ../BSP/BSP_ADC.c
         - path: ../BSP/BSP_ADC.h
+        - path: ../BSP/BSP_KEY.c
+        - path: ../BSP/BSP_KEY.h
         - path: ../BSP/BSP_MT6816.c
         - path: ../BSP/BSP_MT6816.h
-        - path: ../BSP/BSP_WS2812B.c
-        - path: ../BSP/BSP_WS2812B.h
+        - path: ../BSP/BSP_RGB.c
+        - path: ../BSP/BSP_RGB.h
+        - path: ../BSP/BSP_TIM.c
+        - path: ../BSP/BSP_TIM.h
+        - path: ../BSP/test.c
+        - path: ../BSP/test.h
       folders: []
     - name: SguanFOC
       files:
-        - path: ../SguanFOC V3.0.1/Sguan_Config.h
-        - path: ../SguanFOC V3.0.1/Sguan_Filter.c
-        - path: ../SguanFOC V3.0.1/Sguan_Filter.h
-        - path: ../SguanFOC V3.0.1/Sguan_IQmath.c
-        - path: ../SguanFOC V3.0.1/Sguan_IQmath.h
-        - path: ../SguanFOC V3.0.1/Sguan_MotorStatus.c
-        - path: ../SguanFOC V3.0.1/Sguan_MotorStatus.h
-        - path: ../SguanFOC V3.0.1/Sguan_Optimize.c
-        - path: ../SguanFOC V3.0.1/Sguan_Optimize.h
-        - path: ../SguanFOC V3.0.1/Sguan_PID.c
-        - path: ../SguanFOC V3.0.1/Sguan_PID.h
-        - path: ../SguanFOC V3.0.1/Sguan_PLL.c
-        - path: ../SguanFOC V3.0.1/Sguan_PLL.h
-        - path: ../SguanFOC V3.0.1/Sguan_printf.c
-        - path: ../SguanFOC V3.0.1/Sguan_printf.h
-        - path: ../SguanFOC V3.0.1/Sguan_STA.c
-        - path: ../SguanFOC V3.0.1/Sguan_STA.h
-        - path: ../SguanFOC V3.0.1/Sguan_SVPWM.c
-        - path: ../SguanFOC V3.0.1/Sguan_SVPWM.h
-        - path: ../SguanFOC V3.0.1/SguanFOC.c
-        - path: ../SguanFOC V3.0.1/SguanFOC.h
-        - path: ../SguanFOC V3.0.1/UserData_Config.h
-        - path: ../SguanFOC V3.0.1/UserData_Function.h
-        - path: ../SguanFOC V3.0.1/UserData_Motor.h
-        - path: ../SguanFOC V3.0.1/UserData_Parameter.h
-        - path: ../SguanFOC V3.0.1/UserData_Status.h
-        - path: ../SguanFOC V3.0.1/UserData_UserControl.h
+        - path: ../SguanFOC v3.0.1/Sguan_Config.h
+        - path: ../SguanFOC v3.0.1/Sguan_Filter.c
+        - path: ../SguanFOC v3.0.1/Sguan_Filter.h
+        - path: ../SguanFOC v3.0.1/Sguan_IQmath.c
+        - path: ../SguanFOC v3.0.1/Sguan_IQmath.h
+        - path: ../SguanFOC v3.0.1/Sguan_MotorStatus.c
+        - path: ../SguanFOC v3.0.1/Sguan_MotorStatus.h
+        - path: ../SguanFOC v3.0.1/Sguan_Optimize.c
+        - path: ../SguanFOC v3.0.1/Sguan_Optimize.h
+        - path: ../SguanFOC v3.0.1/Sguan_PID.c
+        - path: ../SguanFOC v3.0.1/Sguan_PID.h
+        - path: ../SguanFOC v3.0.1/Sguan_PLL.c
+        - path: ../SguanFOC v3.0.1/Sguan_PLL.h
+        - path: ../SguanFOC v3.0.1/Sguan_printf.c
+        - path: ../SguanFOC v3.0.1/Sguan_printf.h
+        - path: ../SguanFOC v3.0.1/Sguan_STA.c
+        - path: ../SguanFOC v3.0.1/Sguan_STA.h
+        - path: ../SguanFOC v3.0.1/Sguan_SVPWM.c
+        - path: ../SguanFOC v3.0.1/Sguan_SVPWM.h
+        - path: ../SguanFOC v3.0.1/SguanFOC.c
+        - path: ../SguanFOC v3.0.1/SguanFOC.h
+        - path: ../SguanFOC v3.0.1/UserData_Config.h
+        - path: ../SguanFOC v3.0.1/UserData_Function.h
+        - path: ../SguanFOC v3.0.1/UserData_Motor.h
+        - path: ../SguanFOC v3.0.1/UserData_Parameter.h
+        - path: ../SguanFOC v3.0.1/UserData_Status.h
+        - path: ../SguanFOC v3.0.1/UserData_UserControl.h
+      folders: []
+    - name: APP
+      files: []
       folders: []
     - name: ::CMSIS
       files: []
@@ -109,7 +118,7 @@ virtualFolder:
 dependenceList: []
 outDir: build
 miscInfo:
-  uid: d784e4d07c0e167c033fda3d1d40bd15
+  uid: 911571ca6a982ca3ea3daab7545f55eb
 targets:
   GIM6010_V0.0:
     cppPreprocessAttrs:
@@ -123,14 +132,15 @@ targets:
         - ../Drivers/CMSIS/Device/ST/STM32G4xx/Include
         - ../Drivers/CMSIS/Include
         - ../BSP
-        - ../SguanFOC V3.0.1
+        - ../APP
+        - ../SguanFOC v3.0.1
         - .cmsis/include
         - RTE/_GIM6010_V0.0
       libList: []
     excludeList: []
     settings:
       debugger: cortex-debug
-    toolchain: AC5
+    toolchain: AC6
     toolchainConfigMap:
       AC5:
         archExtensions: ""
@@ -234,6 +244,49 @@ targets:
                 startAddr: "0x0"
               tag: IROM
         useCustomScatterFile: false
+      AC6:
+        archExtensions: ""
+        cpuType: Cortex-M4
+        floatingPointHardware: single
+        options:
+          version: 3
+          afterBuildTasks: []
+          asm-compiler:
+            $use: asm-auto
+            misc-controls: ""
+          beforeBuildTasks: []
+          c/cpp-compiler:
+            language-c: c99
+            language-cpp: c++11
+            link-time-optimization: false
+            optimization: level-0
+          global:
+            output-debug-info: enable
+            use-microLIB: false
+          linker:
+            $outputTaskExcludes:
+              - .bin
+            misc-controls: --diag_suppress=L6329
+            output-format: elf
+        scatterFilePath: <YOUR_SCATTER_FILE>.sct
+        storageLayout:
+          RAM:
+            - id: 1
+              isChecked: true
+              mem:
+                size: "0x5000"
+                startAddr: "0x20000000"
+              noInit: false
+              tag: IRAM
+          ROM:
+            - id: 1
+              isChecked: true
+              isStartup: true
+              mem:
+                size: "0x10000"
+                startAddr: "0x08000000"
+              tag: IROM
+        useCustomScatterFile: false
     uploadConfigMap:
       JLink:
         baseAddr: ""
@@ -244,4 +297,14 @@ targets:
         otherCmds: ""
         proType: 1
         speed: 8000
-    uploader: JLink
+      STLink:
+        address: "0x08000000"
+        bin: ""
+        elFile: None
+        optionBytes: .eide/gim6010_v0.0.st.option.bytes.ini
+        otherCmds: ""
+        proType: SWD
+        resetMode: default
+        runAfterProgram: true
+        speed: 4000
+    uploader: STLink

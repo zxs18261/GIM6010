@@ -187,6 +187,7 @@ static void CANFD_ParseCmd(const uint8_t *d)
 {
     int32_t target_i32;
     int16_t speed_rpm;
+    uint8_t start_only = 0U;
     uint16_t cmd = (uint16_t)((uint16_t)d[6] | ((uint16_t)d[7] << 8));
 
     /* DIS 优先于模式和所有保留位；防御性保留该分支，正常 DIS 已由 ISR 锁存。 */
@@ -201,17 +202,23 @@ static void CANFD_ParseCmd(const uint8_t *d)
     /* 1.模式位（与 VOFA BO 一致的四种模式） */
     User_BO_Adjust((float)((cmd & CANFD_CMD_MODE_MASK) >> CANFD_CMD_MODE_SHIFT));
 
-    /* 2.控制字 */
+    /* 2.控制字。带 EN/FAULT_CLEAR 的帧只负责启动或清故障；目标必须由
+     * 主机在随后确认状态=IDLE 后单独发送，避免同帧重新打开功率桥。 */
     if ((cmd & CANFD_CMD_FAULT_CLEAR) != 0U) {
         User_CO_Adjust(1.0f);  /* 复用 UART 的条件检查、目标清零和安全重启路径。 */
+        start_only = 1U;
     }
     if ((cmd & CANFD_CMD_EN) != 0U) {
         if (Sguan.status == MOTOR_STATUS_STANDBY) {
             User_CO_Adjust(1.0f);
         }
+        start_only = 1U;
+    }
+    if (start_only != 0U) {
+        return;
     }
 
-    /* 3.模式目标。使能/清故障同帧只负责启动；主机应等状态=IDLE 后再发目标。 */
+    /* 3.模式目标。 */
     speed_rpm = (int16_t)((uint16_t)d[4] | ((uint16_t)d[5] << 8));
     (void)memcpy(&target_i32, d, 4);
     if (Sguan.mode == Velocity_OPEN_MODE) {

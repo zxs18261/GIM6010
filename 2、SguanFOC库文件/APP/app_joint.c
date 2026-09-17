@@ -3,7 +3,7 @@
   * @file    app_joint.c
   * @brief   GIM6010 关节应用层实现（应用状态机 + LED 主题 + 遥测调度）
   * @note    LED 主题（DOC §10.3）：
-  *          INIT=白色呼吸 / CALIBRATING=黄色闪 / IDLE=绿色呼吸 /
+ *          INIT=橙色呼吸 / CALIBRATING=黄色闪 / IDLE=绿色呼吸 /
   *          RUNNING=青色呼吸 / FAULT=红色快闪 / DISABLED(0x17)=蓝色慢闪
   ******************************************************************************
   */
@@ -27,8 +27,8 @@ static const BSP_RGB_BlinkCfg_t s_blink_red_fast =
     { .count = 3U, .onMs = 60U, .intervalMs = 120U, .groupPauseMs = 300U };
 static const BSP_RGB_BlinkCfg_t s_blink_green_slow =
     { .count = 1U, .onMs = 300U, .intervalMs = 1000U, .groupPauseMs = 0U };
-static const BSP_RGB_BreathCfg_t s_breath_white =
-    { .colorId = BSP_RGB_ID_WHITE, .minLevel = 0U, .maxLevel = 80U, .periodMs = 1500U };
+static const BSP_RGB_BreathCfg_t s_breath_init_orange =
+    { .colorId = BSP_RGB_ID_ORANGE, .minLevel = 0U, .maxLevel = 80U, .periodMs = 1500U };
 static const BSP_RGB_BreathCfg_t s_breath_green =
     { .colorId = BSP_RGB_ID_GREEN, .minLevel = 0U, .maxLevel = 120U, .periodMs = 1200U };
 static const BSP_RGB_BreathCfg_t s_breath_cyan =
@@ -71,7 +71,7 @@ static void APP_LedUpdate(uint32_t tick)
 {
     switch (s_state) {
     case APP_JOINT_INIT:
-        BSP_RGB_Breath(tick, &s_breath_white);
+        BSP_RGB_Breath(tick, &s_breath_init_orange);
         break;
     case APP_JOINT_STANDBY:
         BSP_RGB_Blink(tick, &s_blink_green_slow, BSP_RGB_ID_GREEN, 255U);

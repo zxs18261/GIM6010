@@ -70,9 +70,7 @@ void PID_Loop(PID_STRUCT *pid){
         }
     }
     if (pid->Kd){
-        /* [修复] D项双线性离散差分方程: (2+T*Wc)*Do[n] + (T*Wc-2)*Do[n-1] = 2*Kd*Wc*(e[n]-e[n-1])
-           分子必须是 (e0 - e1)，原代码写成 (e0 + e1) 会把微分变成累加器(DC增益≈2Kd/T) */
-        pid->run.Do[0] = (pid->run.D_num*pid->run.i[0] - pid->run.D_num*pid->run.i[1] 
+        pid->run.Do[0] = (pid->run.D_num*pid->run.i[0] + pid->run.D_num*pid->run.i[1] 
                     - pid->run.D_den[1]*pid->run.Do[1]) / pid->run.D_den[0];
     }
     pid->run.Output = pid->run.i[0]*pid->Kp + pid->run.Io[0] + pid->run.Do[0];
@@ -151,19 +149,12 @@ void PID_Loop_q31(PID_STRUCT_q31 *pid){
         }
     }
     if (pid->Kd){
-        /* [修复] Q31微分项: 与float版差分方程一致 Do[n]=D_num*(e0-e1) - D_den*Do[n-1]
-           (D_den = (T*Wc-2)/(2+T*Wc)，D_num = 2*Kd*Wc/(2+T*Wc)) */
-        pid->run.Do[0] = IQmath_Q31_mul(pid->run.D_num,pid->run.i[0]) -
-                        IQmath_Q31_mul(pid->run.D_num,pid->run.i[1]) -
-                        IQmath_Q31_mul(pid->run.D_den,pid->run.Do[1]);
+        pid->run.Do[0] = IQmath_Q31_mul(pid->run.D_num,pid->run.i[0]) - 
+                        IQmath_Q31_mul(pid->run.D_den,pid->run.Do[1]) + 
+                        IQmath_Q31_mul(pid->run.D_num,pid->run.i[1]);
     }
-    else{
-        pid->run.Do[0] = 0;
-    }
-    /* [修复] 比例项不再借用Do[0](原代码无条件覆盖导致微分丢失)，
-       Output = P(比例) + I(积分) + D(微分)，与float版结构一致 */
-    pid->run.Output = IQmath_Q31_add(IQmath_Q31_mul(pid->run.i[0],pid->run.P_num),
-                        IQmath_Q31_add(pid->run.Io[0],pid->run.Do[0]));
+    pid->run.Do[0] = IQmath_Q31_mul(pid->run.i[0],pid->run.P_num);
+    pid->run.Output = pid->run.Io[0] + pid->run.Do[0];
     pid->run.Output = Value_Limit_q31(pid->run.Output,pid->run.OutMax,pid->run.OutMin);
 }
 
