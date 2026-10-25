@@ -55,4 +55,11 @@ gim6010_v0.0\canfd.o: ../SguanFOC v3.0.1/Sguan_PLL.h
 gim6010_v0.0\canfd.o: ../SguanFOC v3.0.1/Sguan_printf.h
 gim6010_v0.0\canfd.o: ../SguanFOC v3.0.1/Sguan_STA.h
 gim6010_v0.0\canfd.o: ../SguanFOC v3.0.1/Sguan_SVPWM.h
+gim6010_v0.0\canfd.o: ../SguanFOC v3.0.1/UserData_Function.h
+gim6010_v0.0\canfd.o: ../Core/Inc/tim.h
+gim6010_v0.0\canfd.o: ../Core/Inc/adc.h
+gim6010_v0.0\canfd.o: ../Core/Inc/usart.h
+gim6010_v0.0\canfd.o: ../APP/app_callbacks.h
+gim6010_v0.0\canfd.o: ../BSP/BSP_ADC.h
 gim6010_v0.0\canfd.o: C:\Users\18261\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+gim6010_v0.0\canfd.o: ../SguanFOC v3.0.1/UserData_UserControl.h

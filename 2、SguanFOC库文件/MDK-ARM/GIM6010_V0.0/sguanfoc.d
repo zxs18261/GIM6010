@@ -59,6 +59,8 @@ gim6010_v0.0\sguanfoc.o: ../Core/Inc/adc.h
 gim6010_v0.0\sguanfoc.o: ../Core/Inc/usart.h
 gim6010_v0.0\sguanfoc.o: ../APP/app_callbacks.h
 gim6010_v0.0\sguanfoc.o: ../BSP/BSP_ADC.h
+gim6010_v0.0\sguanfoc.o: ../APP/canfd.h
+gim6010_v0.0\sguanfoc.o: C:\Users\18261\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 gim6010_v0.0\sguanfoc.o: ../SguanFOC v3.0.1/UserData_Motor.h
 gim6010_v0.0\sguanfoc.o: ../SguanFOC v3.0.1/UserData_Parameter.h
 gim6010_v0.0\sguanfoc.o: ../SguanFOC v3.0.1/UserData_UserControl.h

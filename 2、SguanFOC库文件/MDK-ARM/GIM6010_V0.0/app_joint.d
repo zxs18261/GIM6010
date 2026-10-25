@@ -60,6 +60,7 @@ gim6010_v0.0\app_joint.o: ../Core/Inc/tim.h
 gim6010_v0.0\app_joint.o: ../Core/Inc/adc.h
 gim6010_v0.0\app_joint.o: ../Core/Inc/usart.h
 gim6010_v0.0\app_joint.o: ../BSP/BSP_ADC.h
+gim6010_v0.0\app_joint.o: ../APP/canfd.h
+gim6010_v0.0\app_joint.o: C:\Users\18261\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 gim6010_v0.0\app_joint.o: ../SguanFOC v3.0.1/UserData_UserControl.h
 gim6010_v0.0\app_joint.o: ../BSP/BSP_WS2812B.h
-gim6010_v0.0\app_joint.o: ../APP/canfd.h
