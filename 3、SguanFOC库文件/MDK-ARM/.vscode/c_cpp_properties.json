@@ -3,17 +3,17 @@
         {
             "name": "GIM6010_V0.0",
             "includePath": [
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\Core\\Inc",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\STM32G4xx_HAL_Driver\\Inc",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\STM32G4xx_HAL_Driver\\Inc\\Legacy",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\CMSIS\\Device\\ST\\STM32G4xx\\Include",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\CMSIS\\Include",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\BSP",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\APP",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\SguanFOC v3.0.1",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\MDK-ARM",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\Core\\Src",
-                "e:\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\STM32G4xx_HAL_Driver\\Src"
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\Core\\Inc",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\STM32G4xx_HAL_Driver\\Inc",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\STM32G4xx_HAL_Driver\\Inc\\Legacy",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\CMSIS\\Device\\ST\\STM32G4xx\\Include",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\CMSIS\\Include",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\BSP",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\APP",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\SguanFOC v3.0.1",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\MDK-ARM",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\Core\\Src",
+                "E:\\百度网盘同步文件夹\\BaiduSyncdisk\\Project\\github\\GIM6010\\3、SguanFOC库文件\\Drivers\\STM32G4xx_HAL_Driver\\Src"
             ],
             "defines": [
                 "USE_HAL_DRIVER",
