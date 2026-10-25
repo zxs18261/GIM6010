@@ -3,14 +3,14 @@
         {
             "name": "SguanFOC_GIM6010",
             "includePath": [
-                "E:/github/GIM6010/SguanFOC库文件/Core/Inc",
-                "E:/github/GIM6010/SguanFOC库文件/Drivers/STM32G4xx_HAL_Driver/Inc",
-                "E:/github/GIM6010/SguanFOC库文件/Drivers/STM32G4xx_HAL_Driver/Inc/Legacy",
-                "E:/github/GIM6010/SguanFOC库文件/Drivers/CMSIS/Device/ST/STM32G4xx/Include",
-                "E:/github/GIM6010/SguanFOC库文件/Drivers/CMSIS/Include",
-                "E:/github/GIM6010/SguanFOC库文件/SguanFOC",
-                "E:/github/GIM6010/SguanFOC库文件/BSP",
-                "E:/github/GIM6010/SguanFOC库文件/Hardware",
+                "E:/百度网盘同步文件夹/BaiduSyncdisk/Project/github/GIM6010/SguanFOC库文件/Core/Inc",
+                "E:/百度网盘同步文件夹/BaiduSyncdisk/Project/github/GIM6010/SguanFOC库文件/Drivers/STM32G4xx_HAL_Driver/Inc",
+                "E:/百度网盘同步文件夹/BaiduSyncdisk/Project/github/GIM6010/SguanFOC库文件/Drivers/STM32G4xx_HAL_Driver/Inc/Legacy",
+                "E:/百度网盘同步文件夹/BaiduSyncdisk/Project/github/GIM6010/SguanFOC库文件/Drivers/CMSIS/Device/ST/STM32G4xx/Include",
+                "E:/百度网盘同步文件夹/BaiduSyncdisk/Project/github/GIM6010/SguanFOC库文件/Drivers/CMSIS/Include",
+                "E:/百度网盘同步文件夹/BaiduSyncdisk/Project/github/GIM6010/SguanFOC库文件/SguanFOC",
+                "E:/百度网盘同步文件夹/BaiduSyncdisk/Project/github/GIM6010/SguanFOC库文件/BSP",
+                "E:/百度网盘同步文件夹/BaiduSyncdisk/Project/github/GIM6010/SguanFOC库文件/Hardware",
                 "${workspaceFolder}/Core/Inc",
                 "${workspaceFolder}/../Core/Inc",
                 "${workspaceFolder}/Drivers/STM32G4xx_HAL_Driver/Inc",
@@ -36,7 +36,7 @@
             "intelliSenseMode": "gcc-arm",
             "browse": {
                 "path": [
-                    "E:/github/GIM6010/SguanFOC库文件"
+                    "E:/百度网盘同步文件夹/BaiduSyncdisk/Project/github/GIM6010/SguanFOC库文件"
                 ],
                 "limitSymbolsToIncludedHeaders": true
             }

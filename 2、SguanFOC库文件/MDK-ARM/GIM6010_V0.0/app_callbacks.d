@@ -57,4 +57,8 @@ gim6010_v0.0\app_callbacks.o: ../SguanFOC v3.0.1/Sguan_STA.h
 gim6010_v0.0\app_callbacks.o: ../SguanFOC v3.0.1/Sguan_SVPWM.h
 gim6010_v0.0\app_callbacks.o: ../BSP/BSP_ADC.h
 gim6010_v0.0\app_callbacks.o: ../APP/canfd.h
+gim6010_v0.0\app_callbacks.o: ../SguanFOC v3.0.1/UserData_Function.h
+gim6010_v0.0\app_callbacks.o: ../Core/Inc/tim.h
 gim6010_v0.0\app_callbacks.o: ../Core/Inc/usart.h
+gim6010_v0.0\app_callbacks.o: C:\Users\18261\AppData\Local\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+gim6010_v0.0\app_callbacks.o: ../SguanFOC v3.0.1/UserData_UserControl.h
